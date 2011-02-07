@@ -49,6 +49,7 @@ STANDARD_BOARD_TILES = {
 	FieldsTile: 4,
 }
 
+STANDARD_BOARD_NUMBERS = [5, 2, 6, 3, 8, 10, 9, 12, 11, 4, 8, 10, 9, 4, 5, 6, 3, 11]
 
 class EmptyTile(Tile):
 	pass
@@ -73,8 +74,65 @@ TILE_DIRECTIONS = [(0, 1, -1),
 		        (-1, 1, 0)]
 
 
+
 def add_pos(p1, p2):
 	return p1[0]+p2[0], p1[1]+p2[1], p1[2]+p2[2]
+
+
+def dist_pos(p1, p2):
+	return (abs(p1[0]-p2[0])+abs(p1[1]-p2[1])+abs(p1[2]-p2[2]))/2
+
+
+def radius_of_pos(p1):
+	return dist_pos( (0,0,0), p1 )
+
+
+# walk all tiles, from a random corner of the tile map
+# circular in one direction, going inwards one step
+# until the center is reached
+def spiral_walk(start):
+	previous = start # FIXME: randomize starting point and direction
+	preprevious = None
+	relax = False
+	yield start
+
+	for cr in range(radius_of_pos(start), 0, -1):
+		# compile a list of possible positions
+		rs = range(-cr, cr+1)
+
+		# FIXME: ensure proper ccw or cw orientation
+		positions = [t for t in product(rs,rs,rs) if sum(t) == 0 and radius_of_pos(t) == cr and t != previous]
+
+		while positions:
+			# remove the position closest to the start position
+			i = 0
+			while True:
+				pos = positions[i]
+				if 1 == dist_pos(previous, pos):
+					if not preprevious or 2 == dist_pos(preprevious, pos):
+						current = positions.pop(i)
+						yield current
+						preprevious = previous
+						previous = current
+						break
+					elif relax:
+						current = positions.pop(i)
+						yield current
+						# keep preprevious
+						relax = False
+						previous = current
+				i += 1
+
+				if i == len(positions):
+					# we're tried all and found no way to continue - this happens when we start on a non-edge
+					# tile and the condition 2 == dist_pos(preprevious, pos) cannot be satisfied
+
+					# relax conditions and try again
+					relax = True
+					#raise Exception('cannot spiral walk from this starting point')
+					i = 0
+
+	yield (0,0,0)
 
 
 class Board(object):
@@ -102,26 +160,30 @@ class Board(object):
 		rs = range(-r, r+1)
 		positions = [t for t in product(rs,rs,rs) if sum(t) == 0]
 
+		# create all tiles
 		for pos in positions:
 			self.tiles[pos] = stack.get_random_tile()()
 
+		# create network on top of tiles
 		for pos, tile in self.tiles.iteritems():
 			nodes = []
 			for i in range(0,len(TILE_DIRECTIONS)):
 				p1, p2 = TILE_DIRECTIONS[i], TILE_DIRECTIONS[(i+1)%len(TILE_DIRECTIONS)]
 				node_id = tuple(sorted([add_pos(pos, p1), add_pos(pos, p2), pos]))
-				print node_id
 
 				# add node
 				self.network.add_node(node_id)
 				nodes.append(node_id)
-			print
 
 			# add connecting edges
 			for i in range(0, len(nodes)):
 				self.network.add_edge(nodes[i], nodes[(i+1)%len(nodes)])
 
 		print "generated network %d nodes, %d edges" % (self.network.number_of_nodes(), self.network.number_of_edges())
+
+
+		for pos in spiral_walk((-1,2,-1)):# FIXME: randomize starting point and direction
+			print "pos",pos
 
 
 class MyApp(ShowBase):
