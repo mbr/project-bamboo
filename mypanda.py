@@ -3,6 +3,8 @@
 
 from direct.showbase.ShowBase import ShowBase
 from direct.actor.Actor import Actor
+from direct.task import Task
+from math import pi, sqrt
 
 from itertools import product
 
@@ -207,35 +209,64 @@ class Board(object):
 			# for easy lookup, register in dice_map
 			self.dice_map.setdefault(self.tiles[pos].number, []).append(self.tiles[pos])
 
+class TileLayout(object):
+	def __init__(self, base, board):
+		self.board = board
+
+		# determine size
+		tileModel = base.loader.loadModel('test')
+		print "tilemodel bounds",tileModel.getBounds()
+		min_bounds,max_bounds = tileModel.getTightBounds()
+		print "min_bounds",min_bounds
+		print "max_bounds",max_bounds
+		d_x = max_bounds[0]-min_bounds[0]
+		d_y = max_bounds[1]-min_bounds[1]
+		print "d",d_x,d_y
+		self.tilescale = 1./d_y
+
+		sqrt3 = sqrt(3)
+		# we get s == 1 by using to tile-scaling
+		# formulas taken from http://stackoverflow.com/questions/2459402/hexagonal-grid-coordinates-to-pixel-coordinates
+		for (a,b,c), tile in board.tiles.iteritems():
+			# load model
+			tileModel = base.loader.loadModel('test')
+
+			x = 3/2.*a/sqrt3
+			y = 0.5*(b-c)
+			tileModel.setPos(x, y, 0)
+
+			# set scaling
+			tileModel.setScale(self.tilescale,self.tilescale,self.tilescale)
+
+			# render
+			tileModel.reparentTo(base.render)
+
+		print "scale",self.tilescale
+
 
 class MyApp(ShowBase):
 	def __init__(self):
 		ShowBase.__init__(self)
 
-		# environment
-#		self.environ = self.loader.loadModel('models/environment')
-#		self.environ.reparentTo(self.render)
-#		self.environ.setScale(0.25, 0.25, 0.25)
-#		self.environ.setPos(-8, 42, 0)
+		# generate a new board
+		board = Board()
+		board.generate_board()
+		print board
 
-		# load a model
-#		self.pandaActor = Actor('models/panda-model')
-		for i in range(0,10):
-			tileModel = self.loader.loadModel('test')
-			print "adding model",tileModel
-			tileModel.reparentTo(self.render)
-			tileModel.setScale(1,1,1)
-			tileModel.setPos(-4.5+i*2.5, -2.5+i*2.5, -2.5)
+		# create 3d model
+#		for pos, tile in b.tiles.iteritems():
+#			print "pos",tile
 
-		# attach to render
-#		self.pandaActor.setScale(0.005, 0.005, 0.0010)
-#		self.pandaActor.reparentTo(self.render)
+		TileLayout(self, board)
 
-#		self.pandaActor.loop('walk')
+
+#		self.camera.setPos(0, 0, 20)
+
+		# control camera
+#		self.camera.setHpr(0, -90, 0)
+#		self.disableMouse()
+
 
 base = MyApp()
 base.run()
 
-#b = Board()
-#b.generate_board()
-#print b
