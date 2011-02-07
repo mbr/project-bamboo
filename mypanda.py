@@ -219,17 +219,23 @@ class MyApp(ShowBase):
 #		self.environ.setPos(-8, 42, 0)
 
 		# load a model
-		self.pandaActor = Actor('models/panda-model')
+#		self.pandaActor = Actor('models/panda-model')
+		for i in range(0,10):
+			tileModel = self.loader.loadModel('test')
+			print "adding model",tileModel
+			tileModel.reparentTo(self.render)
+			tileModel.setScale(1,1,1)
+			tileModel.setPos(-4.5+i*2.5, -2.5+i*2.5, -2.5)
 
 		# attach to render
 #		self.pandaActor.setScale(0.005, 0.005, 0.0010)
-		self.pandaActor.reparentTo(self.render)
+#		self.pandaActor.reparentTo(self.render)
 
 #		self.pandaActor.loop('walk')
 
-#base = MyApp()
-#base.run()
+base = MyApp()
+base.run()
 
-b = Board()
-b.generate_board()
-print b
+#b = Board()
+#b.generate_board()
+#print b
