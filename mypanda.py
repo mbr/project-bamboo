@@ -240,8 +240,6 @@ class TileLayout(object):
 			# render
 			tileModel.reparentTo(base.render)
 
-		print "scale",self.tilescale
-
 	def get_tile_model_filename(self, tile):
 		return 'tiles/%s' % tile.__class__.__name__
 
