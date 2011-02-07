@@ -215,22 +215,21 @@ class TileLayout(object):
 
 		# determine size
 		tileModel = base.loader.loadModel('test')
-		print "tilemodel bounds",tileModel.getBounds()
-		min_bounds,max_bounds = tileModel.getTightBounds()
-		print "min_bounds",min_bounds
-		print "max_bounds",max_bounds
-		d_x = max_bounds[0]-min_bounds[0]
-		d_y = max_bounds[1]-min_bounds[1]
-		print "d",d_x,d_y
-		self.tilescale = 1./d_y
 
 		sqrt3 = sqrt(3)
 		# we get s == 1 by using to tile-scaling
 		# formulas taken from http://stackoverflow.com/questions/2459402/hexagonal-grid-coordinates-to-pixel-coordinates
 		for (a,b,c), tile in board.tiles.iteritems():
 			# load model
-			tileModel = base.loader.loadModel('test')
+			tileModel = base.loader.loadModel(self.get_tile_model_filename(tile))
 
+			# scale automatically
+			min_bounds, max_bounds = tileModel.getTightBounds()
+			d_x = max_bounds[0]-min_bounds[0]
+			d_y = max_bounds[1]-min_bounds[1]
+			self.tilescale = 1./d_y
+
+			# calculate position
 			x = 3/2.*a/sqrt3
 			y = 0.5*(b-c)
 			tileModel.setPos(x, y, 0)
@@ -242,6 +241,9 @@ class TileLayout(object):
 			tileModel.reparentTo(base.render)
 
 		print "scale",self.tilescale
+
+	def get_tile_model_filename(self, tile):
+		return 'tiles/%s' % tile.__class__.__name__
 
 
 class MyApp(ShowBase):
