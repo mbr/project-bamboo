@@ -12,19 +12,24 @@ import networkx as nx
 import random
 
 class Tile(object):
+	resource = None
+	number = None
 	def __str__(self):
-		return '<%s>' % self.__class__.__name__
+		return '<%s(%s): %s>' % (self.__class__.__name__, self.resource, self.number)
 
 
 class MountainTile(Tile):
+	resource = 'Ore'
 	pass
 
 
 class ForestTile(Tile):
+	resource = 'Lumber'
 	pass
 
 
 class PastureTile(Tile):
+	resource = 'Wool'
 	pass
 
 
@@ -33,10 +38,12 @@ class DesertTile(Tile):
 
 
 class FieldsTile(Tile):
+	resource = 'Grain'
 	pass
 
 
 class HillsTile(Tile):
+	resource = 'Brick'
 	pass
 
 
@@ -49,7 +56,14 @@ STANDARD_BOARD_TILES = {
 	FieldsTile: 4,
 }
 
-STANDARD_BOARD_NUMBERS = [5, 2, 6, 3, 8, 10, 9, 12, 11, 4, 8, 10, 9, 4, 5, 6, 3, 11]
+STANDARD_BOARD_CHIPS = [5, 2, 6, 3, 8, 10, 9, 12, 11, 4, 8, 10, 9, 4, 5, 6, 3, 11]
+
+TILE_DIRECTIONS = [(0, 1, -1),
+		        (1, 0, -1),
+		        (1, -1, 0),
+		        (0, -1, 1),
+		        (-1, 0, 1),
+		        (-1, 1, 0)]
 
 class EmptyTile(Tile):
 	pass
@@ -66,13 +80,12 @@ class TileStack(object):
 		return self.tiles.pop(random.randint(0,len(self.tiles)-1))
 
 
-TILE_DIRECTIONS = [(0, 1, -1),
-		        (1, 0, -1),
-		        (1, -1, 0),
-		        (0, -1, 1),
-		        (-1, 0, 1),
-		        (-1, 1, 0)]
+def crossproduct(a, b):
+	return (a[1]*b[2] - a[2]*b[1], a[2]*b[0] - a[0]*b[2], a[0]*b[1] - a[1]*b[0])
 
+
+def dotproduct(a, b):
+	return a[0]*b[0] + a[1]*b[1] + a[2]*b[2]
 
 
 def add_pos(p1, p2):
@@ -91,7 +104,7 @@ def radius_of_pos(p1):
 # circular in one direction, going inwards one step
 # until the center is reached
 def spiral_walk(start):
-	previous = start # FIXME: randomize starting point and direction
+	previous = start
 	preprevious = None
 	relax = False
 	yield start
@@ -140,6 +153,7 @@ class Board(object):
 		# tiles have cube-coordinates: (x,y,z) with x+y+z == 0
 		self.tiles = {}
 		self.network = nx.Graph()
+		self.dice_map = {}
 
 	def __str__(self):
 		s = "Board\n=====\n"
@@ -147,7 +161,7 @@ class Board(object):
 			s += "%s\t%s\n" % pos
 		return s
 
-	def generate_board(self, setup):
+	def generate_board(self, setup = STANDARD_BOARD_TILES, chips = STANDARD_BOARD_CHIPS):
 		stack = TileStack(setup)
 
 		# no floating point arithmetic, please
@@ -163,6 +177,7 @@ class Board(object):
 		# create all tiles
 		for pos in positions:
 			self.tiles[pos] = stack.get_random_tile()()
+			self.tiles[pos].position = pos
 
 		# create network on top of tiles
 		for pos, tile in self.tiles.iteritems():
@@ -181,9 +196,16 @@ class Board(object):
 
 		print "generated network %d nodes, %d edges" % (self.network.number_of_nodes(), self.network.number_of_edges())
 
+		# generate all possible starting positions
+		possible_starts = [t for t in product(rs,rs,rs) if sum(t) == 0 and abs(t[0]) in (0,r) and abs(t[1]) in (0,r) and abs(t[2]) in (0,r)]
 
-		for pos in spiral_walk((-1,2,-1)):# FIXME: randomize starting point and direction
-			print "pos",pos
+		# distribute chips
+		chipstack = chips[:]
+		for pos in spiral_walk(random.choice(possible_starts)):
+			if self.tiles[pos].resource: self.tiles[pos].number = chipstack.pop(0)
+
+			# for easy lookup, register in dice_map
+			self.dice_map.setdefault(self.tiles[pos].number, []).append(self.tiles[pos])
 
 
 class MyApp(ShowBase):
@@ -209,5 +231,5 @@ class MyApp(ShowBase):
 #base.run()
 
 b = Board()
-b.generate_board(STANDARD_BOARD_TILES)
+b.generate_board()
 print b
