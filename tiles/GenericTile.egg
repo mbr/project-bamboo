@@ -12,7 +12,7 @@
   <Scalar> shininess {12.5}
 }
 <Texture> Material.001_00_Tex.003 {
-  "./test.png"
+  "./test.jpeg"
   <Scalar> saved-result { 1 }
   <Scalar> envtype { MODULATE }
   <Scalar> minfilter { LINEAR_MIPMAP_LINEAR }
