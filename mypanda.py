@@ -213,9 +213,6 @@ class TileLayout(object):
 	def __init__(self, base, board):
 		self.board = board
 
-		# determine size
-		tileModel = base.loader.loadModel('test')
-
 		sqrt3 = sqrt(3)
 		# we get s == 1 by using to tile-scaling
 		# formulas taken from http://stackoverflow.com/questions/2459402/hexagonal-grid-coordinates-to-pixel-coordinates
