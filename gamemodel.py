@@ -102,15 +102,26 @@ class HexPosition(object):
 			# check radius
 			if cand.distance_to(m) == r:
 
-				# determine if its clockwise
-				if CLOCKWISE:
+				# determine if going from start to candidate is
+				# is a clockwise motion relative to m
+				if not is_counterclockwise([m.get_projected_coords(), start.get_projected_coords(), cand.get_projected_coords()]):
 					cur = cand
 					break
 
+		assert(cur) # sanity check
+		yield cur
+
+		# starting direction is the one from start to cur
+		cdir_i = self.directions.index(cur-start)
+
 		while cur != start:
-			for d in self.directions:
-				#cand =
-				pass
+			cand = cur+self.directions[cdir_i]
+			if cand.distance_to(m) != r:
+				# time to change directions
+				cdir_i = (cdir_i + 1) % len(self.directions)
+				continue
+			yield cand
+			cur = cand
 
 
 HexPosition.origin = HexPosition()
