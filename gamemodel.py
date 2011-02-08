@@ -61,8 +61,23 @@ class HexPosition(object):
 	def __sub__(self, h):
 		return HexPosition(self._t[0] - h._t[0], self._t[1] - h._t[1], self._t[2] - h._t[2])
 
-	def __cmp__(self, h):
-		return cmp(self._t, h._t)
+	def __lt__(self, o):
+		return self._t < o
+
+	def __le__(self, o):
+		return self._t <= o
+
+	def __eq__(self, o):
+		return self._t == o
+
+	def __ne__(self, o):
+		return self._t != o
+
+	def __gt__(self, o):
+		return self._t > o
+
+	def __ge__(self, o):
+		return self._t >= o
 
 	def __hash__(self):
 		return hash(self._t)
