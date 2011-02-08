@@ -4,6 +4,8 @@
 from direct.showbase.ShowBase import ShowBase
 from direct.actor.Actor import Actor
 from direct.task import Task
+from pandac.PandaModules import AmbientLight
+from panda3d.core import VBase4
 from math import pi, sqrt
 
 from itertools import product
@@ -248,9 +250,14 @@ class MyApp(ShowBase):
 		TileLayout(self, board)
 
 
-		tileModel = base.loader.loadModel('blender/simplecity.egg')
+		tileModel = base.loader.loadModel('models/City.egg')
 		tileModel.setPos(0,0,0)
 		tileModel.reparentTo(self.render)
+
+		alight = AmbientLight('alight')
+		alight.setColor(VBase4(1, 1, 1, 1))
+		alnp = render.attachNewNode(alight)
+		render.setLight(alnp)
 #		self.camera.setPos(0, 0, 20)
 
 		# control camera
