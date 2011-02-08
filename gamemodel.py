@@ -17,17 +17,112 @@ TILE_DIRECTIONS = [(0, 1, -1),
 		        (-1, 0, 1),
 		        (-1, 1, 0)]
 
-# dealing with board-positions
-def add_pos(p1, p2):
-	return p1[0]+p2[0], p1[1]+p2[1], p1[2]+p2[2]
+def signed_area(ps):
+	sum = 0
+	l = len(ps)
+	for i in range(0,l):
+		pi = ps[i]
+		pj = ps[(i+1)%l]
+		sum += pi[0]*pj[1] - pj[0]*pi[1]
+	return 0.5 * sum
 
 
-def dist_pos(p1, p2):
-	return (abs(p1[0]-p2[0])+abs(p1[1]-p2[1])+abs(p1[2]-p2[2]))/2
+def is_counterclockwise(ps):
+	a = signed_area(ps)
+	assert(a != 0)
+	return bool(a)
 
 
-def radius_of_pos(p1):
-	return dist_pos( (0,0,0), p1 )
+class HexPosition(object):
+	class IllegalPositionException(Exception): pass
+
+	def __init__(self, r = 0, g = 0, b = 0):
+		if not r+g+b == 0: raise self.IllegalPositionException()
+		self._t = (r,g,b)
+
+	@property
+	def r(self):
+		return self._t[0]
+
+	@property
+	def g(self):
+		return self._t[1]
+
+	@property
+	def b(self):
+		return self._t[2]
+
+	def __add__(self, h):
+		return HexPosition(self._t[0] + h._t[0], self._t[1] + h._t[1], self._t[2] + h._t[2])
+
+	def __sub__(self, h):
+		return HexPosition(self._t[0] - h._t[0], self._t[1] - h._t[1], self._t[2] - h._t[2])
+
+	def __cmp__(self, h):
+		return cmp(self._t, h._t)
+
+	def __hash__(self):
+		return hash(self._t)
+
+	def norm(self):
+		# uses 3d manhattan metric from the origin as the norm
+		return max(map(abs, self._t))
+
+	def distance_to(self, h):
+		return (self-h).norm()
+
+	#def get_radius(self):
+	#	return self.norm()
+
+	def get_projected_coords(self):
+		# projects _unstretched_ onto a 2d surface.
+		# to get proper coordinates for hex centers,
+		# you need to apply f(x,y) |-> (3/2x, sqrt(3)/2y)
+		return (self._t[0], self._t[1]-self._t[2])
+
+#	@classmethod
+#	def circle(_class, radius, fill = False):
+#		rs = range(-radius,radius+1)
+#		gen = (HexPosition(*t) for t in product(rs,rs,rs) if sum(t) == 0)
+#		if fill: return (h for h in gen if h.get_radius() <= radius)
+#		else: return (h for h in gen if h.get_radius() == radius)
+
+	@classmethod
+	def walk_circle(_class, start, m = None):
+		if m == None: m = self.origin
+		r = start.distance_to(m)
+
+		yield start
+		cur = None
+
+		# get starting move
+		for d in self.directions:
+			cand = start+d
+
+			# check radius
+			if cand.distance_to(m) == r:
+
+				# determine if its clockwise
+				if CLOCKWISE:
+					cur = cand
+					break
+
+		while cur != start:
+			for d in self.directions:
+				#cand =
+				pass
+
+
+HexPosition.origin = HexPosition()
+HexPosition.directions = map(lambda t: HexPosition(*t), [
+                              (0,1,-1), # N
+                              (1,0,-1), # NE
+                              (1,-1,0), # SE
+                              (0,-1,1), # S
+                              (-1,0,1), # SW
+                              (-1,1,0), # NW
+                         ])
+
 
 
 class Tile(object):
@@ -102,12 +197,9 @@ def spiral_walk(start):
 	relax = False
 	yield start
 
-	for cr in range(radius_of_pos(start), 0, -1):
-		# compile a list of possible positions
-		rs = range(-cr, cr+1)
-
+	for cr in range(start.radius(), 0, -1):
 		# FIXME: ensure proper ccw or cw orientation
-		positions = [t for t in product(rs,rs,rs) if sum(t) == 0 and radius_of_pos(t) == cr and t != previous]
+		positions = [p for p in HexPosition.circle(cr) if p != previous]
 
 		while positions:
 			# remove the position closest to the start position
