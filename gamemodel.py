@@ -97,6 +97,7 @@ class HexPosition(object):
 
 	@classmethod
 	def walk_circle(_class, start, m = None):
+		"""starting at start, walk a circle around m, clockwise direction"""
 		if None == m: m = _class.origin
 
 		yield start
@@ -134,6 +135,16 @@ class HexPosition(object):
 			yield cur
 			cur = cand
 
+	@classmethod
+	def walk_spiral(_class, r, direction, m = None):
+		"""walk a spiral until radius r, starting in direction, around m"""
+		if None == m: m = _class.origin
+
+		start = m
+
+		while start.distance_to(m) <= r:
+			for p in _class.walk_circle(start, m): yield p
+			start = p+direction
 
 HexPosition.origin = HexPosition()
 HexPosition.directions = map(lambda t: HexPosition(*t), [
