@@ -13,6 +13,13 @@ class TestGeometryFunctions(unittest.TestCase):
 		triangle.reverse()
 		self.assertEqual(-0.5, signed_area(triangle))
 
+	def test_is_counterclockwise(self):
+		ccw_t = [(0,0), (1,0), (0,1)]
+		cw_t = [(1,1), (1,0), (0,0), (0,1)]
+
+		self.assertTrue(is_counterclockwise(ccw_t))
+		self.assertFalse(is_counterclockwise(cw_t))
+
 
 class TestHexPosition(unittest.TestCase):
 	def test_hex_position_validates_position(self):
