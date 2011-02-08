@@ -134,5 +134,32 @@ class TestHexPosition(unittest.TestCase):
 		self.assertEqual((2,0), i.get_projected_coords())
 		self.assertEqual((0,2), j.get_projected_coords())
 
+	def test_circle_walk(self):
+		circle0 = map(lambda t: HexPosition(*t), [(0,0,0)])
+		circle1 = map(lambda t: HexPosition(*t), [(0,1,-1), (1,0,-1), (1,-1,0), (0,-1,1), (-1,0,1), (-1,1,0)])
+		circle2 = map(lambda t: HexPosition(*t), [(0,2,-2), (1,1,-2), (2,0,-2), (2,-1,-1), (2,-2,0), (1,-2,1), (0,-2,2), (-1,-1,2), (-2,0,2), (-2,1,1), (-2,2,0), (-1,2,-1)])
+
+		# circles around origin
+		def list_rotations(l):
+			for i in range(0,len(l)):
+				yield l[i:] + l[:i]
+
+		for rot in list_rotations(circle1):
+			self.assertEqual(list(HexPosition.walk_circle(rot[0])), rot)
+
+		for rot in list_rotations(circle2):
+			self.assertEqual(list(HexPosition.walk_circle(rot[0])), rot)
+
+		# circles around a different tile
+		m1 = HexPosition(2,-2,0)
+		circle1_m1 = map(lambda a: a+m1, circle1)
+		circle2_m1 = map(lambda a: a+m1, circle2)
+
+		for rot in list_rotations(circle1_m1):
+			self.assertEqual(list(HexPosition.walk_circle(rot[0], m1)), rot)
+
+		for rot in list_rotations(circle2_m1):
+			self.assertEqual(list(HexPosition.walk_circle(rot[0], m1)), rot)
+
 if '__main__' == __name__:
 	unittest.main()
