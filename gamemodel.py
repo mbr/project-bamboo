@@ -107,14 +107,16 @@ class HexPosition(object):
 
 	@classmethod
 	def walk_circle(_class, start, m = None):
-		if m == None: m = self.origin
-		r = start.distance_to(m)
+		if None == m: m = _class.origin
 
 		yield start
+		if start == m: return
+
+		r = start.distance_to(m)
 		cur = None
 
 		# get starting move
-		for d in self.directions:
+		for d in _class.directions:
 			cand = start+d
 
 			# check radius
@@ -126,19 +128,20 @@ class HexPosition(object):
 					cur = cand
 					break
 
-		assert(cur) # sanity check
-		yield cur
-
 		# starting direction is the one from start to cur
-		cdir_i = self.directions.index(cur-start)
+		cdir_i = _class.directions.index(cur-start)
 
 		while cur != start:
-			cand = cur+self.directions[cdir_i]
-			if cand.distance_to(m) != r:
-				# time to change directions
-				cdir_i = (cdir_i + 1) % len(self.directions)
-				continue
-			yield cand
+			# select proper direction
+			while True:
+				cand = cur+_class.directions[cdir_i]
+				if cand.distance_to(m) != r:
+					# time to change directions
+					cdir_i = (cdir_i + 1) % len(_class.directions)
+				else:
+					break
+
+			yield cur
 			cur = cand
 
 
