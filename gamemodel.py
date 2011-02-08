@@ -89,21 +89,11 @@ class HexPosition(object):
 	def distance_to(self, h):
 		return (self-h).norm()
 
-	#def get_radius(self):
-	#	return self.norm()
-
 	def get_projected_coords(self):
 		# projects _unstretched_ onto a 2d surface.
 		# to get proper coordinates for hex centers,
 		# you need to apply f(x,y) |-> (3/2x, sqrt(3)/2y)
 		return (self._t[0], self._t[1]-self._t[2])
-
-#	@classmethod
-#	def circle(_class, radius, fill = False):
-#		rs = range(-radius,radius+1)
-#		gen = (HexPosition(*t) for t in product(rs,rs,rs) if sum(t) == 0)
-#		if fill: return (h for h in gen if h.get_radius() <= radius)
-#		else: return (h for h in gen if h.get_radius() == radius)
 
 	@classmethod
 	def walk_circle(_class, start, m = None):

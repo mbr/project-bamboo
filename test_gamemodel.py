@@ -74,15 +74,6 @@ class TestHexPosition(unittest.TestCase):
 		self.assertEqual(1, x.distance_to(h))
 		self.assertEqual(2, x.distance_to(g))
 
-	def test_hex_position_radius_is_origin_distance(self):
-		return # DISABLED
-		g = HexPosition(-3,6,-3)
-		h = HexPosition(3,-3,0)
-		i = HexPosition(-1,-1,2)
-		self.assertEqual(g.distance_to(HexPosition()), g.get_radius())
-		self.assertEqual(h.distance_to(HexPosition()), h.get_radius())
-		self.assertEqual(i.distance_to(HexPosition()), i.get_radius())
-
 	def test_hex_positions_test_equality(self):
 		g = HexPosition()
 		h = HexPosition()
@@ -109,19 +100,6 @@ class TestHexPosition(unittest.TestCase):
 		unsor.sort()
 
 		self.assertEqual(sor, unsor)
-
-	def test_hex_position_generators(self):
-		return # DISABLED
-		circle0 = set([HexPosition()])
-		circle1 = set(map(lambda t: HexPosition(*t), [(0, 1, -1), (1, 0, -1), (1, -1, 0), (0, -1, 1), (-1, 0, 1), (-1, 1, 0)]))
-
-		circle0_1 = circle0.copy()
-		circle0_1.update(circle1)
-
-		self.assertEqual(circle0, set(HexPosition.circle(0)))
-		self.assertEqual(circle1, set(HexPosition.circle(1)))
-
-		self.assertEqual(circle0_1, set(HexPosition.circle(1, True)))
 
 	def test_hex_position_2d_game_projection(self):
 		g = HexPosition(-2,1,1)
