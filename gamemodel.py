@@ -221,51 +221,6 @@ class TileStack(object):
 		return self.tiles.pop(random.randint(0,len(self.tiles)-1))
 
 
-# walk all tiles, from a random corner of the tile map
-# circular in one direction, going inwards one step
-# until the center is reached
-def spiral_walk(start):
-	previous = start
-	preprevious = None
-	relax = False
-	yield start
-
-	for cr in range(start.radius(), 0, -1):
-		# FIXME: ensure proper ccw or cw orientation
-		positions = [p for p in HexPosition.circle(cr) if p != previous]
-
-		while positions:
-			# remove the position closest to the start position
-			i = 0
-			while True:
-				pos = positions[i]
-				if 1 == dist_pos(previous, pos):
-					if not preprevious or 2 == dist_pos(preprevious, pos):
-						current = positions.pop(i)
-						yield current
-						preprevious = previous
-						previous = current
-						break
-					elif relax:
-						current = positions.pop(i)
-						yield current
-						# keep preprevious
-						relax = False
-						previous = current
-				i += 1
-
-				if i == len(positions):
-					# we're tried all and found no way to continue - this happens when we start on a non-edge
-					# tile and the condition 2 == dist_pos(preprevious, pos) cannot be satisfied
-
-					# relax conditions and try again
-					relax = True
-					#raise Exception('cannot spiral walk from this starting point')
-					i = 0
-
-	yield (0,0,0)
-
-
 class Board(object):
 	def __init__(self):
 		# tiles have cube-coordinates: (x,y,z) with x+y+z == 0

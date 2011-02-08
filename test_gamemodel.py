@@ -139,5 +139,12 @@ class TestHexPosition(unittest.TestCase):
 		for rot in list_rotations(circle2_m1):
 			self.assertEqual(list(HexPosition.walk_circle(rot[0], m1)), rot)
 
+	def test_spiral_walk(self):
+		spiral1 = map(lambda t: HexPosition(*t), [(0,0,0), (0,1,-1), (1,0,-1), (1,-1,0), (0,-1,1), (-1,0,1), (-1,1,0)])
+		spiral2 = map(lambda t: HexPosition(*t), [(0,0,0), (0,1,-1), (1,0,-1), (1,-1,0), (0,-1,1), (-1,0,1), (-1,1,0), (-1, 2, -1), (0,2,-2), (1,1,-2), (2,0,-2), (2,-1,-1), (2,-2,0), (1,-2,1), (0,-2,2), (-1,-1,2), (-2,0,2), (-2,1,1), (-2,2,0)])
+
+		self.assertEqual(list(HexPosition.walk_spiral(1, HexPosition(0,1,-1))), spiral1)
+		self.assertEqual(list(HexPosition.walk_spiral(2, HexPosition(0,1,-1))), spiral2)
+
 if '__main__' == __name__:
 	unittest.main()
