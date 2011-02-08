@@ -2,10 +2,19 @@
 
 <Comment> { "Egg laid by Chicken for Blender, version R91" }
 
-<Material> Material.002 {
+<Material> Default {
+  <Scalar> diffr {0.55721539259}
+  <Scalar> diffg {0.328214198351}
+  <Scalar> diffb {0.174764603376}
+  <Scalar> specr {0.25}
+  <Scalar> specg {0.25}
+  <Scalar> specb {0.25}
+  <Scalar> shininess {12.5}
+}
+<Material> PlayerColor {
   <Scalar> diffr {1.0}
   <Scalar> diffg {0.0}
-  <Scalar> diffb {0.0}
+  <Scalar> diffb {0.368434906006}
   <Scalar> specr {0.25}
   <Scalar> specg {0.25}
   <Scalar> specb {0.25}
@@ -116,58 +125,62 @@
       -0.0699999704957 0.0699999928474 0.140000134706
     }
   }
-  <Polygon> {
-    <MRef> { Material.002 }
-    <Normal> { 0.000000 -1.000000 0.000000
+  <Group> Plane.002_00_PlayerColor {
+    <Polygon> {
+      <MRef> { PlayerColor }
+      <Normal> { -0.000000 -1.000000 -0.000000
+      }
+      <VertexRef> { 4 5 6 <Ref> { Plane.002 } }
     }
-    <VertexRef> { 0 1 2 3 <Ref> { Plane.002 } }
+    <Polygon> {
+      <MRef> { PlayerColor }
+      <Normal> { 0.650792 0.000000 0.759256
+      }
+      <VertexRef> { 7 8 9 10 <Ref> { Plane.002 } }
+    }
+    <Polygon> {
+      <MRef> { PlayerColor }
+      <Normal> { -0.650791 0.000000 0.759257
+      }
+      <VertexRef> { 11 12 13 14 <Ref> { Plane.002 } }
+    }
+    <Polygon> {
+      <MRef> { PlayerColor }
+      <Normal> { -0.000000 1.000000 -0.000000
+      }
+      <VertexRef> { 31 32 33 <Ref> { Plane.002 } }
+    }
   }
-  <Polygon> {
-    <MRef> { Material.002 }
-    <Normal> { -0.000000 -1.000000 -0.000000
+  <Group> Plane.002_01_Default {
+    <Polygon> {
+      <MRef> { Default }
+      <Normal> { 0.000000 -1.000000 0.000000
+      }
+      <VertexRef> { 0 1 2 3 <Ref> { Plane.002 } }
     }
-    <VertexRef> { 4 5 6 <Ref> { Plane.002 } }
-  }
-  <Polygon> {
-    <MRef> { Material.002 }
-    <Normal> { 0.650792 0.000000 0.759256
+    <Polygon> {
+      <MRef> { Default }
+      <Normal> { -1.000000 0.000000 0.000000
+      }
+      <VertexRef> { 15 16 17 18 <Ref> { Plane.002 } }
     }
-    <VertexRef> { 7 8 9 10 <Ref> { Plane.002 } }
-  }
-  <Polygon> {
-    <MRef> { Material.002 }
-    <Normal> { -0.650791 0.000000 0.759257
+    <Polygon> {
+      <MRef> { Default }
+      <Normal> { 1.000000 0.000000 -0.000000
+      }
+      <VertexRef> { 19 20 21 22 <Ref> { Plane.002 } }
     }
-    <VertexRef> { 11 12 13 14 <Ref> { Plane.002 } }
-  }
-  <Polygon> {
-    <MRef> { Material.002 }
-    <Normal> { -1.000000 0.000000 0.000000
+    <Polygon> {
+      <MRef> { Default }
+      <Normal> { 0.000000 -0.000000 -1.000000
+      }
+      <VertexRef> { 23 24 25 26 <Ref> { Plane.002 } }
     }
-    <VertexRef> { 15 16 17 18 <Ref> { Plane.002 } }
-  }
-  <Polygon> {
-    <MRef> { Material.002 }
-    <Normal> { 1.000000 0.000000 -0.000000
+    <Polygon> {
+      <MRef> { Default }
+      <Normal> { -0.000000 1.000000 0.000000
+      }
+      <VertexRef> { 27 28 29 30 <Ref> { Plane.002 } }
     }
-    <VertexRef> { 19 20 21 22 <Ref> { Plane.002 } }
-  }
-  <Polygon> {
-    <MRef> { Material.002 }
-    <Normal> { 0.000000 -0.000000 -1.000000
-    }
-    <VertexRef> { 23 24 25 26 <Ref> { Plane.002 } }
-  }
-  <Polygon> {
-    <MRef> { Material.002 }
-    <Normal> { -0.000000 1.000000 0.000000
-    }
-    <VertexRef> { 27 28 29 30 <Ref> { Plane.002 } }
-  }
-  <Polygon> {
-    <MRef> { Material.002 }
-    <Normal> { -0.000000 1.000000 -0.000000
-    }
-    <VertexRef> { 31 32 33 <Ref> { Plane.002 } }
   }
 }
