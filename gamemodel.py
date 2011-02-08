@@ -76,7 +76,7 @@ class HexPosition(object):
 		return hash(self._t)
 
 	def norm(self):
-		# uses 3d manhattan metric from the origin as the norm
+		# uses p=inf metric from the origin as the norm
 		return max(map(abs, self._t))
 
 	def distance_to(self, h):
