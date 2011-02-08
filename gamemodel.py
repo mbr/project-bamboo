@@ -1,14 +1,8 @@
 #!/usr/bin/env python
 # coding=utf8
 
-from itertools import product
 import random
-
-# nx imports some legacy code
-import warnings
-with warnings.catch_warnings():
-	warnings.filterwarnings('ignore', module = '(networkx|matplotlib).*')
-	import networkx
+import networkx
 
 def signed_area(ps):
 	sum = 0
