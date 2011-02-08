@@ -30,7 +30,7 @@ def signed_area(ps):
 def is_counterclockwise(ps):
 	a = signed_area(ps)
 	assert(a != 0)
-	return bool(a)
+	return a > 0
 
 
 class HexPosition(object):
