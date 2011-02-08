@@ -40,6 +40,9 @@ class HexPosition(object):
 		if not r+g+b == 0: raise self.IllegalPositionException()
 		self._t = (r,g,b)
 
+	def __repr__(self):
+		return '%s(%d, %d, %d)' % (self.__class__.__name__, self.r, self.g, self.b)
+
 	@property
 	def r(self):
 		return self._t[0]
