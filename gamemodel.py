@@ -10,13 +10,6 @@ with warnings.catch_warnings():
 	warnings.filterwarnings('ignore', module = '(networkx|matplotlib).*')
 	import networkx
 
-TILE_DIRECTIONS = [(0, 1, -1),
-		        (1, 0, -1),
-		        (1, -1, 0),
-		        (0, -1, 1),
-		        (-1, 0, 1),
-		        (-1, 1, 0)]
-
 def signed_area(ps):
 	sum = 0
 	l = len(ps)
@@ -157,7 +150,6 @@ HexPosition.directions = map(lambda t: HexPosition(*t), [
                          ])
 
 
-
 class Tile(object):
 	resource = None
 	number = None
@@ -237,27 +229,37 @@ class Board(object):
 	def generate_board(self, setup = STANDARD_BOARD_TILES, chips = STANDARD_BOARD_CHIPS):
 		stack = TileStack(setup)
 
-		# no floating point arithmetic, please
+		# determine board radius
 		l = len(stack.tiles)-1
 		r = 0
 		while l > 0:
 			r += 1
 			l -= r*6
 
-		rs = range(-r, r+1)
-		positions = [t for t in product(rs,rs,rs) if sum(t) == 0]
+		# we will walk from the inside to the outside, so reverse
+		# the chip order
+		chipstack = chips[:]
+		chips.reverse()
 
-		# create all tiles
-		for pos in positions:
+		# spiral walk to create board
+		# use a random direction
+		for pos in HexPosition.walk_spiral(r, random.choice(HexPosition.directions)):
+			# first, put down tile
 			self.tiles[pos] = stack.get_random_tile()()
 			self.tiles[pos].position = pos
+
+			# then place a chip on top, if it's not a desert
+			if self.tiles[pos].resource: self.tiles[pos].number = chipstack.pop(0)
+
+			# for easy lookup, register in dice_map
+			self.dice_map.setdefault(self.tiles[pos].number, []).append(self.tiles[pos])
 
 		# create network on top of tiles
 		for pos, tile in self.tiles.iteritems():
 			nodes = []
-			for i in range(0,len(TILE_DIRECTIONS)):
-				p1, p2 = TILE_DIRECTIONS[i], TILE_DIRECTIONS[(i+1)%len(TILE_DIRECTIONS)]
-				node_id = tuple(sorted([add_pos(pos, p1), add_pos(pos, p2), pos]))
+			for i in range(0,len(HexPosition.directions)):
+				p1, p2 = HexPosition.directions[i], HexPosition.directions[(i+1)%len(HexPosition.directions)]
+				node_id = tuple(sorted([pos+p1, pos+p2, pos]))
 
 				# add node
 				self.network.add_node(node_id)
@@ -268,14 +270,3 @@ class Board(object):
 				self.network.add_edge(nodes[i], nodes[(i+1)%len(nodes)])
 
 		print "generated network %d nodes, %d edges" % (self.network.number_of_nodes(), self.network.number_of_edges())
-
-		# generate all possible starting positions
-		possible_starts = [t for t in product(rs,rs,rs) if sum(t) == 0 and abs(t[0]) in (0,r) and abs(t[1]) in (0,r) and abs(t[2]) in (0,r)]
-
-		# distribute chips
-		chipstack = chips[:]
-		for pos in spiral_walk(random.choice(possible_starts)):
-			if self.tiles[pos].resource: self.tiles[pos].number = chipstack.pop(0)
-
-			# for easy lookup, register in dice_map
-			self.dice_map.setdefault(self.tiles[pos].number, []).append(self.tiles[pos])
