@@ -220,19 +220,10 @@ class TileLayout(object):
 			# load model
 			tileModel = base.loader.loadModel(self.get_tile_model_filename(tile))
 
-			# scale automatically
-			min_bounds, max_bounds = tileModel.getTightBounds()
-			d_x = max_bounds[0]-min_bounds[0]
-			d_y = max_bounds[1]-min_bounds[1]
-			self.tilescale = 1./d_y
-
 			# calculate position
-			x = 3/2.*a/sqrt3
-			y = 0.5*(b-c)
+			x = 3/2.*a
+			y = (b-c)*sqrt3/2
 			tileModel.setPos(x, y, 0)
-
-			# set scaling
-			tileModel.setScale(self.tilescale,self.tilescale,self.tilescale)
 
 			# render
 			tileModel.reparentTo(base.render)
@@ -257,6 +248,9 @@ class MyApp(ShowBase):
 		TileLayout(self, board)
 
 
+		tileModel = base.loader.loadModel('blender/simplecity.egg')
+		tileModel.setPos(0,0,0)
+		tileModel.reparentTo(self.render)
 #		self.camera.setPos(0, 0, 20)
 
 		# control camera
