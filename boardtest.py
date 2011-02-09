@@ -9,6 +9,7 @@ from panda3d.core import VBase4
 from math import pi, sqrt, acos
 
 from gamemodel import *
+import random
 
 def norm(v):
 	return sqrt(v[0]**2+v[1]**2+v[2]**2)
@@ -82,6 +83,18 @@ class MyApp(ShowBase):
 		board = Board()
 		board.generate_board()
 		print board
+
+		# place some random cities
+		for i in range(0,4):
+			while True:
+				n = random.choice(board.network.nodes())
+				if board.node_available(n):
+					board.network.node[n]['building'] = 'city'
+
+					# place a random road
+					m = random.choice(board.network.neighbors(n))
+					board.network.edge[n][m]['road'] = True
+					break
 
 		BoardRenderer(self, board)
 
