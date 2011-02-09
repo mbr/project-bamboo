@@ -35,17 +35,19 @@ class BoardRenderer(object):
 
 		# handle graph nodes
 		for n in self.board.network.nodes_iter():
-			cityModel = base.loader.loadModel('models/City.egg')
-			cityModel.setPos(*self.get_node_coordinates(n))
-			cityModel.reparentTo(base.render)
+			building = self.board.network.node[n].get('building',None)
+			if building == 'city':
+				cityModel = base.loader.loadModel('models/City.egg')
+				cityModel.setPos(*self.get_node_coordinates(n))
+				cityModel.reparentTo(base.render)
 
 		# handle graph edges
 		for e in self.board.network.edges_iter():
-			roadModel = base.loader.loadModel('models/Road.egg')
-			print "edge angle",self.get_edge_angle(e) * 180/pi
-			roadModel.setH(self.get_edge_angle(e) * 180/pi)
-			roadModel.setPos(*self.get_edge_coordinates(e))
-			roadModel.reparentTo(base.render)
+			if 'road' in self.board.network.edge[e[0]][e[1]]:
+				roadModel = base.loader.loadModel('models/Road.egg')
+				roadModel.setH(self.get_edge_angle(e) * 180/pi)
+				roadModel.setPos(*self.get_edge_coordinates(e))
+				roadModel.reparentTo(base.render)
 
 	def get_tile_model_filename(self, tile):
 		return 'tiles/%s' % tile.__class__.__name__
