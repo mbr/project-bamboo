@@ -195,6 +195,9 @@ STANDARD_BOARD_TILES = {
 
 STANDARD_BOARD_CHIPS = [5, 2, 6, 3, 8, 10, 9, 12, 11, 4, 8, 10, 9, 4, 5, 6, 3, 11]
 
+# this order is the same as when using frames
+# to get the variable tile based order, simply shuffle
+STANDARD_HARBORS = ['3to1', 'Brick', 'Lumber', '3to1', 'Grain', 'Ore', '3to1', 'Sheep', '3to1']
 
 class TileStack(object):
 	def __init__(self, initial_tiles):
@@ -266,6 +269,71 @@ class Board(object):
 			# add connecting edges
 			for i in range(0, len(nodes)):
 				self.network.add_edge(nodes[i], nodes[(i+1)%len(nodes)])
+
+		def outer_edge_walk(r):
+			"""walk along the coast, radius r"""
+			# starting top right tile, top node
+			start_tile = HexPosition(r+1, 0, -r-1)
+			starting_node = tuple(sorted((start_tile, start_tile+HexPosition.directions[-1], start_tile+HexPosition.directions[-2])))
+
+			yield starting_node
+			node_id = starting_node
+			prev_node = node_id
+
+			# try all neighbours
+			candidates = self.network.neighbors(node_id)
+			while candidates:
+				n = candidates.pop()
+
+				# if we visited it just before, skip it
+				if prev_node == n: continue
+
+				# end once we reach the start again
+				if starting_node == n: break
+
+				# must be a node on the coast, i.e. bordering on at least one land (r-1) and sea (r) tile
+				sea, land = False, False
+				for tile_pos in n:
+					distance = tile_pos.distance_to(HexPosition.origin)
+					if distance >= r+1: sea = True
+					else: land = True
+
+				# if it's not a coastal node, skip it
+				if not sea or not land:
+					continue
+
+				# it's a non-visited coastal node - move on to it
+				prev_node = node_id
+				node_id = n
+				yield node_id
+
+				# start with the next set of neighbours
+				candidates = self.network.neighbors(node_id)
+
+		def harbor_placement():
+			# 1, 1, 2, 1, 1, 2, ...
+			order = (True, True, False) * 2 + (True, True, False, False)
+
+			# start with 1
+			i = 3
+			while True:
+				yield order[i]
+				i = (i+1)%len(order)
+
+		harbor_place = harbor_placement()
+		harbors = STANDARD_HARBORS[:]
+
+		# disable this to not shuffle harbors
+
+		prev = False
+		for node_id in outer_edge_walk(2):
+			print "walking nodes",node_id
+			if harbor_place.next():
+				if not prev: harbor = harbors.pop(0)
+				self.network.node[node_id]['harbor'] = harbor
+				prev = True
+			else:
+				prev = False
 
 		print "generated network %d nodes, %d edges" % (self.network.number_of_nodes(), self.network.number_of_edges())
 
