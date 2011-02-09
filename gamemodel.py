@@ -324,6 +324,7 @@ class Board(object):
 		harbors = STANDARD_HARBORS[:]
 
 		# disable this to not shuffle harbors
+		random.shuffle(harbors)
 
 		prev = False
 		for node_id in outer_edge_walk(2):
