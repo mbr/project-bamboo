@@ -213,6 +213,7 @@ class Board(object):
 		self.tiles = {}
 		self.network = networkx.Graph()
 		self.dice_map = {}
+		self.robber = None
 
 	def __str__(self):
 		s = "Board\n=====\n"
@@ -242,9 +243,11 @@ class Board(object):
 			self.tiles[pos].position = pos
 
 			# then place a chip on top, if it's not a desert
-
 			if self.tiles[pos].resource:
 				self.tiles[pos].number = chipstack.pop()
+			else:
+				# place robber on desert at start
+				self.robber = pos
 
 			# for easy lookup, register in dice_map
 			self.dice_map.setdefault(self.tiles[pos].number, []).append(self.tiles[pos])
