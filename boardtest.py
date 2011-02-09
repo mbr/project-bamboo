@@ -31,6 +31,15 @@ class BoardRenderer(object):
 			# calculate position
 			tileModel.setPos(*self.get_tile_coordinates(pos))
 
+			# load and place chip
+			if tile.number:
+				chipModel = base.loader.loadModel('blender/chiptest')
+				chipModel.setScale(0.2, 0.2, 0.2) # oops
+				chipModel.setPos(*self.get_tile_coordinates(pos))
+				tex = base.loader.loadTexture('textures/chip_%d.png' % tile.number)
+				chipModel.setTexture(tex, 1)
+				chipModel.reparentTo(base.render)
+
 			# render
 			tileModel.reparentTo(base.render)
 
