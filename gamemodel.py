@@ -264,3 +264,11 @@ class Board(object):
 				self.network.add_edge(nodes[i], nodes[(i+1)%len(nodes)])
 
 		print "generated network %d nodes, %d edges" % (self.network.number_of_nodes(), self.network.number_of_edges())
+
+	def node_available(self, node_id):
+		if 'building' in self.network.node[node_id]: return False
+
+		# check if neighbours have buildings
+		for n in self.network.neighbors(node_id):
+			if 'building' in self.network.node[n]: return False
+		return True
