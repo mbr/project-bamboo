@@ -233,7 +233,6 @@ class Board(object):
 		# we will walk from the inside to the outside, so reverse
 		# the chip order
 		chipstack = chips[:]
-		chips.reverse()
 
 		# spiral walk to create board
 		# use a random direction
@@ -243,7 +242,9 @@ class Board(object):
 			self.tiles[pos].position = pos
 
 			# then place a chip on top, if it's not a desert
-			if self.tiles[pos].resource: self.tiles[pos].number = chipstack.pop(0)
+
+			if self.tiles[pos].resource:
+				self.tiles[pos].number = chipstack.pop()
 
 			# for easy lookup, register in dice_map
 			self.dice_map.setdefault(self.tiles[pos].number, []).append(self.tiles[pos])
