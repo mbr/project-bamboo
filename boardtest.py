@@ -70,7 +70,7 @@ class BoardRenderer(object):
 		# handle graph edges
 		for e in self.board.network.edges_iter():
 			if 'road' in self.board.network.edge[e[0]][e[1]]:
-				roadModel = base.loader.loadModel('models/Road.egg')
+				roadModel = base.loader.loadModel('blender/roadtest')
 
 				# get coordinates
 				co_s, co_t = map(self.get_node_coordinates, e)
