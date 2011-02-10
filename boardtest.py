@@ -72,6 +72,7 @@ class BoardRenderer(object):
 			if building == 'city':
 				cityModel = base.loader.loadModel('blender/simplecity.egg')
 				self.apply_player_texture(cityModel, self.board.network.node[n]['player'])
+				cityModel.setH(random.random()*360) # rotation randomly
 				cityModel.setPos(*self.get_node_coordinates(n))
 				cityModel.reparentTo(base.render)
 
