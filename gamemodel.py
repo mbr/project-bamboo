@@ -348,3 +348,29 @@ class Board(object):
 		for n in self.network.neighbors(node_id):
 			if 'building' in self.network.node[n]: return False
 		return True
+
+
+class Game(object):
+	class ColorAlreadyTakenException(Exception): pass
+	player_colors = 'red', 'blue', 'green', 'orange', 'brown', 'white'
+
+	def __init__(self):
+		self.board = Board()
+		self.board.generate_board()
+		self.players = {}
+
+	def create_player(self, name, color = None):
+		if color in self.players: raise self.ColorAlreadyTakenException('Color %s is already taken')
+		self.players[color] = Player(name, color or random.choice(self.colors_still_available()))
+
+	def colors_still_available(self):
+		cs = []
+		for col in self.player_colors:
+			if col not in self.players: cs.append(col)
+		return cs
+
+
+class Player(object):
+	def __init__(self, name, color):
+		self.name = name
+		self.color = color

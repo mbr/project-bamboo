@@ -133,24 +133,22 @@ class MyApp(ShowBase):
 	def __init__(self):
 		ShowBase.__init__(self)
 
-		# generate a new board
-		board = Board()
-		board.generate_board()
-		print board
+		# generate a new game
+		game = Game()
 
 		# place some random cities
 		for i in range(0,4):
 			while True:
-				n = random.choice(board.network.nodes())
-				if board.node_available(n):
-					board.network.node[n]['building'] = 'city'
+				n = random.choice(game.board.network.nodes())
+				if game.board.node_available(n):
+					game.board.network.node[n]['building'] = 'city'
 
 					# place a random road
-					m = random.choice(board.network.neighbors(n))
-					board.network.edge[n][m]['road'] = True
+					m = random.choice(game.board.network.neighbors(n))
+					game.board.network.edge[n][m]['road'] = True
 					break
 
-		BoardRenderer(self, board)
+		BoardRenderer(self, game.board)
 
 		# ambient light, so we can see colors on models
 		alight = AmbientLight('alight')
