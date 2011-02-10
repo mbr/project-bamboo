@@ -22,10 +22,11 @@ def align_to_vector(v):
 	v2d_n = Vec3(v2d)
 	v2d_n.normalize()
 
-	m = Mat4(v2d_n[0],  -v2d[1], 0, 0,
-			   v2d[1], v2d_n[0], 0, 0,
+	m = Mat4(v2d_n[0],  -v2d_n[1], 0, 0,
+			   v2d_n[1], v2d_n[0], 0, 0,
 					0,        0, 1, 0,
 					0,        0, 0, 1)
+	m.invertInPlace()
 	return m
 
 class BoardRenderer(object):
