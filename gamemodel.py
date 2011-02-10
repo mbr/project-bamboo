@@ -360,8 +360,9 @@ class Game(object):
 		self.players = {}
 
 	def create_player(self, name, color = None):
-		if color in self.players: raise self.ColorAlreadyTakenException('Color %s is already taken')
-		self.players[color] = Player(name, color or random.choice(self.colors_still_available()))
+		color = color or random.choice(self.colors_still_available())
+		if color in self.players: raise self.ColorAlreadyTakenException('Color %s is already taken' % color)
+		self.players[color] = Player(name, color)
 
 	def colors_still_available(self):
 		cs = []
