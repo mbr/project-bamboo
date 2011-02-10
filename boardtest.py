@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 # coding=utf8
 
+import sys
+
 from direct.showbase.ShowBase import ShowBase
+from direct.showbase import DirectObject
 from direct.actor.Actor import Actor
 from direct.task import Task
-from pandac.PandaModules import AmbientLight, Spotlight, PerspectiveLens, DirectionalLight
-from panda3d.core import VBase4, Vec3, Vec4, Mat4, TransformState, Material
+from pandac.PandaModules import AmbientLight, Spotlight, PerspectiveLens, DirectionalLight, AntialiasAttrib, WindowProperties
+from panda3d.core import VBase4, Vec3, Vec4, Mat4, TransformState, Material, ConfigVariableInt, ConfigVariableBool, ConfigVariableString
 from math import pi, sqrt, acos
 
 from gamemodel import *
@@ -139,7 +142,7 @@ class BoardRenderer(object):
 			path.setTexture(tex)
 
 
-class MyApp(ShowBase):
+class MyApp(ShowBase, DirectObject.DirectObject):
 	def __init__(self):
 		ShowBase.__init__(self)
 
@@ -198,5 +201,24 @@ class MyApp(ShowBase):
 		lBelowNode.setR(0)
 		render.setLight(lBelowNode)
 
+		self.accept('a', self.on_toggle_anti_alias)
+		self.accept('q', self.on_quit)
+
+	def on_toggle_anti_alias(self):
+		if AntialiasAttrib.MNone != render.getAntialias():
+			render.setAntialias(AntialiasAttrib.MNone)
+			print "anti-aliasing disabled"
+		else:
+			render.setAntialias(AntialiasAttrib.MAuto)
+			print "anti-aliasing enabled"
+
+	def on_quit(self):
+		sys.exit(0)
+
+# set some configuration
+ConfigVariableBool("show-frame-rate-meter").setValue(True)
+
 base = MyApp()
+
+base.on_toggle_anti_alias()
 base.run()
