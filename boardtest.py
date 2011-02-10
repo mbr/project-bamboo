@@ -29,6 +29,13 @@ def align_to_vector(v):
 	m.invertInPlace()
 	return m
 
+def draw_debugging_arrow(base, v_from, v_to):
+	arrowModel = base.loader.loadModel('models/debuggingArrow')
+	mat = align_to_vector(v_to-v_from)
+	arrowModel.setTransform(TransformState.makeMat(mat))
+	arrowModel.setPos(*v_from)
+	arrowModel.reparentTo(base.render)
+
 class BoardRenderer(object):
 	def __init__(self, base, board, x_stretch = 3/2., y_stretch = sqrt(3)/2., z_plane = 0):
 		self.board = board
