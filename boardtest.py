@@ -26,8 +26,6 @@ def align_to_vector(v):
 			   v2d[1], v2d_n[0], 0, 0,
 					0,        0, 1, 0,
 					0,        0, 0, 1)
-	print "align"
-	print m
 	return m
 
 class BoardRenderer(object):
