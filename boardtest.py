@@ -4,7 +4,7 @@
 from direct.showbase.ShowBase import ShowBase
 from direct.actor.Actor import Actor
 from direct.task import Task
-from pandac.PandaModules import AmbientLight
+from pandac.PandaModules import AmbientLight, Spotlight, PerspectiveLens, DirectionalLight
 from panda3d.core import VBase4, Vec3, Vec4, Mat4, TransformState, Material
 from math import pi, sqrt, acos
 
@@ -165,12 +165,38 @@ class MyApp(ShowBase):
 
 		BoardRenderer(self, game.board)
 
-		# ambient light, so we can see colors on models
-		alight = AmbientLight('alight')
-		alight.setColor(VBase4(1, 1, 1, 1))
-		alnp = render.attachNewNode(alight)
-		render.setLight(alnp)
+		# setup some 3-point lighting for the whole board
+		lKey = DirectionalLight('lKey')
+		lKey.setColor(VBase4(0.9,0.9,0.9,1))
+		lKeyNode = render.attachNewNode(lKey)
+		lKeyNode.setH(-63)
+		lKeyNode.setP(-60)
+		lKeyNode.setR(-30)
+		render.setLight(lKeyNode)
 
+		lFill = DirectionalLight('lFill')
+		lFill.setColor(VBase4(0.4,0.4,0.4,1))
+		lFillNode = render.attachNewNode(lFill)
+		lFillNode.setH(27)
+		lFillNode.setP(-15)
+		lFillNode.setR(-30)
+		render.setLight(lFillNode)
+
+		lBack = DirectionalLight('lBack')
+		lBack.setColor(VBase4(0.3,0.3,0.3,1))
+		lBackNode = render.attachNewNode(lBack)
+		lBackNode.setH(177)
+		lBackNode.setP(-20)
+		lBackNode.setR(0)
+		render.setLight(lBackNode)
+
+		lBelow = DirectionalLight('lBelow')
+		lBelow.setColor(VBase4(0.4,0.4,0.4,1))
+		lBelowNode = render.attachNewNode(lBelow)
+		lBelowNode.setH(0)
+		lBelowNode.setP(90)
+		lBelowNode.setR(0)
+		render.setLight(lBelowNode)
 
 base = MyApp()
 base.run()
