@@ -94,6 +94,29 @@ class BoardRenderer(object):
 			robberModel.setPos(*self.get_tile_coordinates(self.board.robber))
 			robberModel.reparentTo(base.render)
 
+		# place harbors
+		try:
+			coast_nodes = self.board.walk_coast()
+			while True:
+				node_id = coast_nodes.next()
+				if 'harbor' in self.board.network.node[node_id]:
+					# harbors should appear in pairs
+					node_id2 = coast_nodes.next()
+					assert(self.board.network.node[node_id]['harbor'] == self.board.network.node[node_id2]['harbor'])
+
+					# harbor edge
+					h1, h2 = self.get_node_coordinates(node_id), self.get_node_coordinates(node_id2)
+					harborModel = base.loader.loadModel('blender/harbortest')
+
+					# rotate harbor
+					mat = align_to_vector(h2-h1)
+					harborModel.setTransform(TransformState.makeMat(mat))
+
+					harborModel.setPos(h1)
+					harborModel.reparentTo(base.render)
+		except StopIteration:
+			pass
+
 	def get_tile_model_filename(self, tile):
 		return 'tiles/%s' % tile.__class__.__name__
 
