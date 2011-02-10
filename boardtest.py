@@ -5,14 +5,30 @@ from direct.showbase.ShowBase import ShowBase
 from direct.actor.Actor import Actor
 from direct.task import Task
 from pandac.PandaModules import AmbientLight
-from panda3d.core import VBase4
+from panda3d.core import VBase4, Vec3, Vec4, Mat4, TransformState
 from math import pi, sqrt, acos
 
 from gamemodel import *
 import random
 
-def norm(v):
-	return sqrt(v[0]**2+v[1]**2+v[2]**2)
+def align_to_vector(v):
+	"""Given a vector v, calculates the non-scaling transformation matrix
+	   that would point the x-axis along it, assuming they share the same z"""
+
+	# get the 2d part, normalize
+	v2d = Vec3(v)
+	v2d[2] = 0
+
+	v2d_n = Vec3(v2d)
+	v2d_n.normalize()
+
+	m = Mat4(v2d_n[0],  -v2d[1], 0, 0,
+			   v2d[1], v2d_n[0], 0, 0,
+					0,        0, 1, 0,
+					0,        0, 0, 1)
+	print "align"
+	print m
+	return m
 
 class BoardRenderer(object):
 	def __init__(self, base, board, x_stretch = 3/2., y_stretch = sqrt(3)/2., z_plane = 0):
@@ -55,8 +71,15 @@ class BoardRenderer(object):
 		for e in self.board.network.edges_iter():
 			if 'road' in self.board.network.edge[e[0]][e[1]]:
 				roadModel = base.loader.loadModel('models/Road.egg')
-				roadModel.setH(self.get_edge_angle(e) * 180/pi)
-				roadModel.setPos(*self.get_edge_coordinates(e))
+
+				# get coordinates
+				co_s, co_t = map(self.get_node_coordinates, e)
+
+				# align
+				mat = align_to_vector(co_t-co_s)
+				roadModel.setTransform(TransformState.makeMat(mat))
+
+				roadModel.setPos(co_s)
 				roadModel.reparentTo(base.render)
 
 		# place robber
@@ -71,24 +94,11 @@ class BoardRenderer(object):
 
 	def get_tile_coordinates(self, pos):
 		x, y = pos.get_projected_coords()
-		return x*self.x_stretch, y*self.y_stretch, self.z_plane
+		return Vec3(x*self.x_stretch, y*self.y_stretch, self.z_plane)
 
 	def get_node_coordinates(self, node_id):
 		a, b, c = map(self.get_tile_coordinates, node_id)
-		return (a[0]+b[0]+c[0])/3., (a[1]+b[1]+c[1])/3., (a[2]+b[2]+c[2])/3.
-
-	def get_edge_coordinates(self, edge):
-		a, b = map(self.get_node_coordinates, edge)
-		return (a[0]+b[0])/2., (a[1]+b[1])/2., (a[2]+b[2])/2.
-
-	def get_edge_vector(self, edge):
-		a, b = map(self.get_node_coordinates, edge)
-		if b[1] < a[1]: a, b = b, a # always go from bottom to top
-		return b[0]-a[0], b[1]-a[1], b[2]-a[2]
-
-	def get_edge_angle(self, edge):
-		v = self.get_edge_vector(edge)
-		return acos(v[0]+self.z_plane/norm(v))
+		return Vec3((a[0]+b[0]+c[0])/3., (a[1]+b[1]+c[1])/3., (a[2]+b[2]+c[2])/3.)
 
 
 class MyApp(ShowBase):
