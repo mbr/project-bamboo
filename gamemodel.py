@@ -220,8 +220,10 @@ class Board(object):
 
 	def __str__(self):
 		s = "Board\n=====\n"
-		for pos in self.tiles.iteritems():
-			s += "%s\t%s\n" % pos
+		for pos, tile in self.tiles.iteritems():
+			s += "%s\t%s" % (pos, tile)
+			if pos == self.robber: s += " robber!"
+			s += "\n"
 		return s
 
 	def generate_board(self, setup = STANDARD_BOARD_TILES, chips = STANDARD_BOARD_CHIPS):

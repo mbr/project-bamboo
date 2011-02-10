@@ -84,7 +84,6 @@ class BoardRenderer(object):
 
 		# place robber
 		if self.board.robber:
-			print "robber on",self.board.robber
 			robberModel = base.loader.loadModel('blender/robbertest.egg')
 			robberModel.setPos(*self.get_tile_coordinates(self.board.robber))
 			robberModel.reparentTo(base.render)
