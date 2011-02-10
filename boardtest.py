@@ -56,7 +56,7 @@ class BoardRenderer(object):
 
 			# load and place chip
 			if tile.number:
-				chipModel = base.loader.loadModel('blender/chiptest')
+				chipModel = base.loader.loadModel('models/chiptest')
 				chipModel.setScale(0.2, 0.2, 0.2) # oops
 				chipModel.setPos(*self.get_tile_coordinates(pos))
 				tex = base.loader.loadTexture('textures/chip_%d.png' % tile.number)
@@ -70,7 +70,7 @@ class BoardRenderer(object):
 		for n in self.board.network.nodes_iter():
 			building = self.board.network.node[n].get('building',None)
 			if building == 'city':
-				cityModel = base.loader.loadModel('blender/simplecity.egg')
+				cityModel = base.loader.loadModel('models/simpleCity.egg')
 				self.apply_player_texture(cityModel, self.board.network.node[n]['player'])
 				cityModel.setH(random.random()*360) # rotation randomly
 				cityModel.setPos(*self.get_node_coordinates(n))
@@ -79,7 +79,7 @@ class BoardRenderer(object):
 		# handle graph edges
 		for e in self.board.network.edges_iter():
 			if 'road' in self.board.network.edge[e[0]][e[1]]:
-				roadModel = base.loader.loadModel('blender/roadtest')
+				roadModel = base.loader.loadModel('models/simpleRoad')
 				self.apply_player_texture(roadModel, self.board.network.edge[e[0]][e[1]]['player'])
 
 				# get coordinates
@@ -94,7 +94,7 @@ class BoardRenderer(object):
 
 		# place robber
 		if self.board.robber:
-			robberModel = base.loader.loadModel('blender/robbertest.egg')
+			robberModel = base.loader.loadModel('models/simpleRobber')
 			robberModel.setPos(*self.get_tile_coordinates(self.board.robber))
 			robberModel.reparentTo(base.render)
 
@@ -110,7 +110,7 @@ class BoardRenderer(object):
 
 					# harbor edge
 					h1, h2 = self.get_node_coordinates(node_id), self.get_node_coordinates(node_id2)
-					harborModel = base.loader.loadModel('blender/harbortest')
+					harborModel = base.loader.loadModel('models/simpleHarbor')
 
 					# rotate harbor
 					mat = align_to_vector(h2-h1)
