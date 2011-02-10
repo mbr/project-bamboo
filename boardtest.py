@@ -5,7 +5,7 @@ from direct.showbase.ShowBase import ShowBase
 from direct.actor.Actor import Actor
 from direct.task import Task
 from pandac.PandaModules import AmbientLight
-from panda3d.core import VBase4, Vec3, Vec4, Mat4, TransformState
+from panda3d.core import VBase4, Vec3, Vec4, Mat4, TransformState, Material
 from math import pi, sqrt, acos
 
 from gamemodel import *
@@ -38,6 +38,7 @@ def draw_debugging_arrow(base, v_from, v_to):
 
 class BoardRenderer(object):
 	def __init__(self, base, board, x_stretch = 3/2., y_stretch = sqrt(3)/2., z_plane = 0):
+		self.base = base
 		self.board = board
 		self.x_stretch = x_stretch
 		self.y_stretch = y_stretch
@@ -69,7 +70,8 @@ class BoardRenderer(object):
 		for n in self.board.network.nodes_iter():
 			building = self.board.network.node[n].get('building',None)
 			if building == 'city':
-				cityModel = base.loader.loadModel('models/City.egg')
+				cityModel = base.loader.loadModel('blender/simplecity.egg')
+				self.apply_player_texture(cityModel, self.board.network.node[n]['player'])
 				cityModel.setPos(*self.get_node_coordinates(n))
 				cityModel.reparentTo(base.render)
 
@@ -77,6 +79,7 @@ class BoardRenderer(object):
 		for e in self.board.network.edges_iter():
 			if 'road' in self.board.network.edge[e[0]][e[1]]:
 				roadModel = base.loader.loadModel('blender/roadtest')
+				self.apply_player_texture(roadModel, self.board.network.edge[e[0]][e[1]]['player'])
 
 				# get coordinates
 				co_s, co_t = map(self.get_node_coordinates, e)
@@ -128,6 +131,12 @@ class BoardRenderer(object):
 		a, b, c = map(self.get_tile_coordinates, node_id)
 		return Vec3((a[0]+b[0]+c[0])/3., (a[1]+b[1]+c[1])/3., (a[2]+b[2]+c[2])/3.)
 
+	def apply_player_texture(self, model, player, player_index = 0):
+		# load texture
+		tex = self.base.loader.loadTexture('textures/player%s.png' % player.color.capitalize())
+		for path in model.findAllMatches('**/playerColor%d*' % player_index):
+			path.setTexture(tex)
+
 
 class MyApp(ShowBase):
 	def __init__(self):
@@ -135,17 +144,22 @@ class MyApp(ShowBase):
 
 		# generate a new game
 		game = Game()
+		game.create_player('Player One')
+		game.create_player('Player Two')
+		game.create_player('Player Three')
 
 		# place some random cities
-		for i in range(0,4):
+		for player in game.players.values():
 			while True:
 				n = random.choice(game.board.network.nodes())
 				if game.board.node_available(n):
 					game.board.network.node[n]['building'] = 'city'
+					game.board.network.node[n]['player'] = player
 
 					# place a random road
 					m = random.choice(game.board.network.neighbors(n))
 					game.board.network.edge[n][m]['road'] = True
+					game.board.network.edge[n][m]['player'] = player
 					break
 
 		BoardRenderer(self, game.board)
