@@ -9,7 +9,7 @@ from direct.actor.Actor import Actor
 from direct.task import Task
 from pandac.PandaModules import AmbientLight, Spotlight, PerspectiveLens, DirectionalLight, AntialiasAttrib, WindowProperties
 from panda3d.core import VBase4, Vec3, Vec4, Mat4, TransformState, Material, ConfigVariableInt, ConfigVariableBool, ConfigVariableString
-from math import pi, sqrt, acos
+from math import pi, sqrt, cos, sin
 
 from gamemodel import *
 import random
@@ -242,6 +242,9 @@ class MyApp(ShowBase, DirectObject.DirectObject):
 		render.setLight(lBelowNode)
 
 		self.accept('a', self.on_toggle_anti_alias)
+		self.mouse_controlled = True
+		self.on_toggle_mouse_control()
+		self.accept('m', self.on_toggle_mouse_control)
 		self.accept('q', self.on_quit)
 
 	def on_toggle_anti_alias(self):
@@ -251,6 +254,27 @@ class MyApp(ShowBase, DirectObject.DirectObject):
 		else:
 			render.setAntialias(AntialiasAttrib.MAuto)
 			print "anti-aliasing enabled"
+
+	def on_toggle_mouse_control(self):
+		if self.mouse_controlled:
+			self.disableMouse()
+			self.taskMgr.add(self.spin_camera_task, "spinCameraTask")
+		else: self.enableMouse()
+
+
+		self.mouse_controlled = not self.mouse_controlled
+
+	def spin_camera_task(self, task):
+		height = 9
+		distance = 15
+		speed = 1./16
+		angle = (task.time*speed) * 2 * pi
+
+		self.camera.setPos(distance*cos(angle), distance*-sin(angle), height)
+		self.camera.lookAt(0,0,0)
+
+		if self.mouse_controlled: return Task.done
+		return Task.cont
 
 	def on_quit(self):
 		sys.exit(0)
