@@ -8,7 +8,7 @@ from direct.showbase import DirectObject
 from direct.actor.Actor import Actor
 from direct.task import Task
 from pandac.PandaModules import AmbientLight, Spotlight, PerspectiveLens, DirectionalLight, AntialiasAttrib, WindowProperties
-from panda3d.core import VBase4, Vec3, Vec4, Mat4, TransformState, Material, ConfigVariableInt, ConfigVariableBool, ConfigVariableString
+from panda3d.core import VBase4, Vec3, Vec4, Mat4, TransformState, Material, ConfigVariableInt, ConfigVariableBool, ConfigVariableString, CollisionTraverser, CollisionNode, CollisionHandlerQueue, CollisionRay, GeomNode, Texture
 from math import pi, sqrt, cos, sin
 
 from gamemodel import *
@@ -48,7 +48,7 @@ class SimpleTileset(object):
 
 	def get_chip_model(self, number):
 		chipModel = self.base.loader.loadModel(self.tileset_path + 'models/chip')
-		tex = self.base.loader.loadTexture(self.tileset_path + 'textures/chip%d.png' % number)
+		tex = self.load_texture('textures/chip%d.png' % number)
 		chipModel.find('**/chip').setTexture(tex, 1)
 		return chipModel
 
@@ -59,7 +59,7 @@ class SimpleTileset(object):
 		return self.base.loader.loadModel(self.tileset_path + 'models/harbor')
 
 	def get_player_texture(self, player):
-		return self.base.loader.loadTexture(self.tileset_path + 'textures/player%s.png' % player.color.capitalize())
+		return self.load_texture('textures/player%s.png' % player.color.capitalize())
 
 	def get_road_model(self):
 		return self.base.loader.loadModel(self.tileset_path + 'models/road')
@@ -74,12 +74,18 @@ class SimpleTileset(object):
 		# texture
 		texname = tile.__class__.__name__
 		texname = texname[0].lower() + texname[1:]
-		tex = self.base.loader.loadTexture(self.tileset_path + 'textures/%s.jpeg' % texname)
+		tex = self.load_texture('textures/%s.jpeg' % texname)
 		tileModel.find('**/tile').setTexture(tex, 1)
 
 		chip_offset = Vec3(0,0,0.001)
 
 		return (tileModel, chip_offset)
+
+	def load_texture(self, subpath):
+		tex = self.base.loader.loadTexture(self.tileset_path + subpath)
+		tex.setMinfilter(Texture.FTLinearMipmapLinear)
+		tex.setAnisotropicDegree(2)
+		return tex
 
 
 class BoardRenderer(object):
