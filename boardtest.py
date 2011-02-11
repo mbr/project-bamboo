@@ -16,19 +16,18 @@ import random
 
 def align_to_vector(v):
 	"""Given a vector v, calculates the non-scaling transformation matrix
-	   that would point the x-axis along it, assuming they share the same z"""
+	   that would point the x-axis along it, assuming they share the same z.
 
-	# get the 2d part, normalize
-	v2d = Vec3(v)
-	v2d[2] = 0
+	   Important: Modifies v in place!
+	   """
 
-	v2d_n = Vec3(v2d)
-	v2d_n.normalize()
+	v[2] = 0
+	v.normalize()
 
-	m = Mat4(v2d_n[0],  -v2d_n[1], 0, 0,
-			   v2d_n[1], v2d_n[0], 0, 0,
-					0,        0, 1, 0,
-					0,        0, 0, 1)
+	m = Mat4(v[0], -v[1], 0, 0,
+			 v[1],  v[0], 0, 0,
+			 0,       0, 1, 0,
+			 0,       0, 0, 1)
 	m.invertInPlace()
 	return m
 
