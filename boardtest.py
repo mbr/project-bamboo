@@ -24,11 +24,10 @@ def align_to_vector(v):
 	v[2] = 0
 	v.normalize()
 
-	m = Mat4(v[0], -v[1], 0, 0,
-			 v[1],  v[0], 0, 0,
+	m = Mat4(v[0], v[1], 0, 0,
+			 -v[1],  v[0], 0, 0,
 			 0,       0, 1, 0,
 			 0,       0, 0, 1)
-	m.invertInPlace()
 	return m
 
 
