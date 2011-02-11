@@ -40,6 +40,8 @@ def draw_debugging_arrow(base, v_from, v_to):
 	arrowModel.setPos(*v_from)
 	arrowModel.reparentTo(base.render)
 
+	return arrowModel
+
 
 class SimpleTileset(object):
 	def __init__(self, base, tileset_path = 'tilesets/simple/'):
