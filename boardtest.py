@@ -73,7 +73,7 @@ class SimpleTileset(object):
 		texname = tile.__class__.__name__
 		texname = texname[0].lower() + texname[1:]
 		tex = self.base.loader.loadTexture(self.tileset_path + 'textures/%s.jpeg' % texname)
-		tileModel.find('**/tile').setTexture(tex)
+		tileModel.find('**/tile').setTexture(tex, 1)
 
 		chip_offset = Vec3(0,0,0.001)
 
