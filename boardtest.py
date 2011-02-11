@@ -32,6 +32,7 @@ def align_to_vector(v):
 	m.invertInPlace()
 	return m
 
+
 def draw_debugging_arrow(base, v_from, v_to):
 	arrowModel = base.loader.loadModel('models/debuggingArrow')
 	mat = align_to_vector(v_to-v_from)
@@ -39,10 +40,51 @@ def draw_debugging_arrow(base, v_from, v_to):
 	arrowModel.setPos(*v_from)
 	arrowModel.reparentTo(base.render)
 
+
+class SimpleTileset(object):
+	def __init__(self, base, tileset_path = 'tilesets/simple/'):
+		self.base = base
+		self.tileset_path = tileset_path
+
+	def get_chip_model(self, number):
+		chipModel = self.base.loader.loadModel(self.tileset_path + 'models/chip')
+		return chipModel
+
+	def get_city_model(self):
+		return self.base.loader.loadModel(self.tileset_path + 'models/city')
+
+	def get_harbor_model(self):
+		return self.base.loader.loadModel(self.tileset_path + 'models/harbor')
+
+	def get_player_texture(self, player):
+		return self.base.loader.loadTexture(self.tileset_path + 'textures/player%s.png' % player.color.capitalize())
+
+	def get_road_model(self):
+		return self.base.loader.loadModel(self.tileset_path + 'models/road')
+
+	def get_robber_model(self):
+		return self.base.loader.loadModel(self.tileset_path + 'models/robber')
+
+	def get_tile_model_with_chip_offset(self, tile):
+		# load generic tile
+		tileModel = self.base.loader.loadModel(self.tileset_path + 'models/genericTile')
+
+		# texture
+		texname = tile.__class__.__name__
+		texname = texname[0].lower() + texname[1:]
+		tex = self.base.loader.loadTexture(self.tileset_path + 'textures/%s.jpeg' % texname)
+		tileModel.find('**/tile').setTexture(tex)
+
+		chip_offset = Vec3(0,0,0.001)
+
+		return (tileModel, chip_offset)
+
+
 class BoardRenderer(object):
-	def __init__(self, base, board, x_stretch = 3/2., y_stretch = sqrt(3)/2., z_plane = 0):
+	def __init__(self, base, board, tileset = None, x_stretch = 3/2., y_stretch = sqrt(3)/2., z_plane = 0):
 		self.base = base
 		self.board = board
+		self.tileset = tileset or SimpleTileset(base)
 		self.x_stretch = x_stretch
 		self.y_stretch = y_stretch
 		self.z_plane = 0
@@ -52,19 +94,17 @@ class BoardRenderer(object):
 		# x and y stretch should result in correct coordinates
 		for pos, tile in board.tiles.iteritems():
 			# load model
-			tileModel = base.loader.loadModel(self.get_tile_model_filename(tile))
+			(tileModel, chip_offset) = self.tileset.get_tile_model_with_chip_offset(tile)
 
 			# calculate position
-			tileModel.setPos(*self.get_tile_coordinates(pos))
+			tile_coordinates = self.get_tile_coordinates(pos)
+			tileModel.setPos(*tile_coordinates)
 
 			# load and place chip
 			if tile.number:
-				chipModel = base.loader.loadModel('models/chiptest')
-				chipModel.setScale(0.2, 0.2, 0.2) # oops
-				chipModel.setPos(*self.get_tile_coordinates(pos))
-				tex = base.loader.loadTexture('textures/chip_%d.png' % tile.number)
-				chipModel.setTexture(tex, 1)
-				chipModel.reparentTo(base.render)
+				chipModel = self.tileset.get_chip_model(tile.number)
+				chipModel.setPos(chip_offset)
+				chipModel.reparentTo(tileModel)
 
 			# render
 			tileModel.reparentTo(base.render)
@@ -73,7 +113,7 @@ class BoardRenderer(object):
 		for n in self.board.network.nodes_iter():
 			building = self.board.network.node[n].get('building',None)
 			if building == 'city':
-				cityModel = base.loader.loadModel('models/simpleCity.egg')
+				cityModel = self.tileset.get_city_model()
 				self.apply_player_texture(cityModel, self.board.network.node[n]['player'])
 				cityModel.setH(random.random()*360) # rotation randomly
 				cityModel.setPos(*self.get_node_coordinates(n))
@@ -82,7 +122,7 @@ class BoardRenderer(object):
 		# handle graph edges
 		for e in self.board.network.edges_iter():
 			if 'road' in self.board.network.edge[e[0]][e[1]]:
-				roadModel = base.loader.loadModel('models/simpleRoad')
+				roadModel = self.tileset.get_road_model()
 				self.apply_player_texture(roadModel, self.board.network.edge[e[0]][e[1]]['player'])
 
 				# get coordinates
@@ -97,7 +137,7 @@ class BoardRenderer(object):
 
 		# place robber
 		if self.board.robber:
-			robberModel = base.loader.loadModel('models/simpleRobber')
+			robberModel = self.tileset.get_robber_model()
 			robberModel.setPos(*self.get_tile_coordinates(self.board.robber))
 			robberModel.reparentTo(base.render)
 
@@ -113,7 +153,7 @@ class BoardRenderer(object):
 
 					# harbor edge
 					h1, h2 = self.get_node_coordinates(node_id), self.get_node_coordinates(node_id2)
-					harborModel = base.loader.loadModel('models/simpleHarbor')
+					harborModel = self.tileset.get_harbor_model()
 
 					# rotate harbor
 					mat = align_to_vector(h2-h1)
@@ -123,9 +163,6 @@ class BoardRenderer(object):
 					harborModel.reparentTo(base.render)
 		except StopIteration:
 			pass
-
-	def get_tile_model_filename(self, tile):
-		return 'tiles/%s' % tile.__class__.__name__
 
 	def get_tile_coordinates(self, pos):
 		x, y = pos.get_projected_coords()
@@ -137,7 +174,8 @@ class BoardRenderer(object):
 
 	def apply_player_texture(self, model, player, player_index = 0):
 		# load texture
-		tex = self.base.loader.loadTexture('textures/player%s.png' % player.color.capitalize())
+		tex = self.tileset.get_player_texture(player)
+
 		for path in model.findAllMatches('**/playerColor%d*' % player_index):
 			path.setTexture(tex)
 
