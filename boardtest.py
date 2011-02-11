@@ -48,6 +48,8 @@ class SimpleTileset(object):
 
 	def get_chip_model(self, number):
 		chipModel = self.base.loader.loadModel(self.tileset_path + 'models/chip')
+		tex = self.base.loader.loadTexture(self.tileset_path + 'textures/chip%d.png' % number)
+		chipModel.find('**/chip').setTexture(tex, 1)
 		return chipModel
 
 	def get_city_model(self):
