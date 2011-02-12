@@ -8,7 +8,7 @@ from direct.showbase import DirectObject
 from direct.actor.Actor import Actor
 from direct.task import Task
 from pandac.PandaModules import AmbientLight, Spotlight, PerspectiveLens, DirectionalLight, AntialiasAttrib, WindowProperties
-from panda3d.core import VBase4, Vec3, Vec4, Mat4, TransformState, Material, ConfigVariableInt, ConfigVariableBool, ConfigVariableString, CollisionTraverser, CollisionNode, CollisionHandlerQueue, CollisionRay, GeomNode, Texture
+from panda3d.core import VBase4, Vec3, Vec4, Mat4, TransformState, Material, ConfigVariableInt, ConfigVariableBool, ConfigVariableString, CollisionTraverser, CollisionNode, CollisionHandlerQueue, CollisionRay, GeomNode, Texture, TextureStage
 from math import pi, sqrt, cos, sin
 
 from gamemodel import *
@@ -107,12 +107,14 @@ class BoardRenderer(object):
 			# calculate position
 			tile_coordinates = self.get_tile_coordinates(pos)
 			tileModel.setPos(*tile_coordinates)
+			tileModel.setTag('pickable', 'True')
 
 			# load and place chip
 			if tile.number:
 				chipModel = self.tileset.get_chip_model(tile.number)
 				chipModel.setPos(chip_offset)
 				chipModel.reparentTo(tileModel)
+				chipModel.setTag('pickable', 'False')
 
 			# render
 			tileModel.reparentTo(base.render)
@@ -126,6 +128,7 @@ class BoardRenderer(object):
 				cityModel.setH(random.random()*360) # rotation randomly
 				cityModel.setPos(*self.get_node_coordinates(n))
 				cityModel.reparentTo(base.render)
+				cityModel.setTag('pickable', 'True')
 
 		# handle graph edges
 		for e in self.board.network.edges_iter():
@@ -142,12 +145,14 @@ class BoardRenderer(object):
 
 				roadModel.setPos(co_s)
 				roadModel.reparentTo(base.render)
+				roadModel.setTag('pickable', 'True')
 
 		# place robber
 		if self.board.robber:
 			robberModel = self.tileset.get_robber_model()
 			robberModel.setPos(*self.get_tile_coordinates(self.board.robber))
 			robberModel.reparentTo(base.render)
+			robberModel.setTag('pickable', 'True')
 
 		# place harbors
 		try:
@@ -168,6 +173,7 @@ class BoardRenderer(object):
 					harborModel.setTransform(TransformState.makeMat(mat))
 
 					harborModel.setPos(h1)
+					harborModel.setTag('pickable', 'True')
 					harborModel.reparentTo(base.render)
 		except StopIteration:
 			pass
@@ -212,7 +218,7 @@ class MyApp(ShowBase, DirectObject.DirectObject):
 					game.board.network.edge[n][m]['player'] = player
 					break
 
-		BoardRenderer(self, game.board)
+		self.renderer = BoardRenderer(self, game.board)
 
 		# setup some 3-point lighting for the whole board
 		lKey = DirectionalLight('lKey')
@@ -247,10 +253,20 @@ class MyApp(ShowBase, DirectObject.DirectObject):
 		lBelowNode.setR(0)
 		render.setLight(lBelowNode)
 
+		self.pick_ray = CollisionRay()
+		self.pick_traverser = CollisionTraverser()
+		self.pick_queue = CollisionHandlerQueue()
+
+		picker_node = CollisionNode('mouseRay')
+		picker_node.setFromCollideMask(GeomNode.getDefaultCollideMask())
+		picker_node.addSolid(self.pick_ray)
+		self.pick_traverser.addCollider(self.camera.attachNewNode(picker_node), self.pick_queue)
+
 		self.accept('a', self.on_toggle_anti_alias)
 		self.mouse_controlled = True
 		self.on_toggle_mouse_control()
 		self.accept('m', self.on_toggle_mouse_control)
+		self.accept('mouse1', self.on_pick)
 		self.accept('q', self.on_quit)
 
 	def on_toggle_anti_alias(self):
@@ -267,7 +283,6 @@ class MyApp(ShowBase, DirectObject.DirectObject):
 			self.taskMgr.add(self.spin_camera_task, "spinCameraTask")
 		else: self.enableMouse()
 
-
 		self.mouse_controlled = not self.mouse_controlled
 
 	def spin_camera_task(self, task):
@@ -281,6 +296,27 @@ class MyApp(ShowBase, DirectObject.DirectObject):
 
 		if self.mouse_controlled: return Task.done
 		return Task.cont
+
+	def on_pick(self):
+		if not base.mouseWatcherNode.hasMouse(): return
+
+		# setup ray through camera position and mouse position (on camera plane)
+		mouse_pos = base.mouseWatcherNode.getMouse()
+		self.pick_ray.setFromLens(self.renderer.base.camNode, mouse_pos.getX(), mouse_pos.getY())
+
+		# traverse scene graph and determine nearest selection (if pickable)
+		self.pick_traverser.traverse(self.renderer.base.render)
+		self.pick_queue.sortEntries()
+		if not self.pick_queue.getNumEntries(): return
+		node = self.pick_queue.getEntry(0).getIntoNodePath().findNetTag('pickable')
+		if node.isEmpty() or node.getTag('pickable') == 'False': return
+
+		# add some color
+		ts = TextureStage('ts')
+		ts.setMode(TextureStage.MModulate)
+		colors = list(Game.player_colors)
+		colors.remove('white')
+		node.setTexture(ts, self.renderer.tileset.load_texture('textures/player%s.png' % random.choice(colors).capitalize()))
 
 	def on_quit(self):
 		sys.exit(0)
