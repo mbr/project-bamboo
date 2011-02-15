@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="154.13387"
+   height="239.17323"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="oreCard.svg">
+  <defs
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+    <inkscape:perspective
+       id="perspective3674"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3760"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2926"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3010"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ff00d8"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.8"
+     inkscape:cx="108.37033"
+     inkscape:cy="111.31062"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     showborder="true"
+     inkscape:showpageshadow="true"
+     inkscape:window-width="1920"
+     inkscape:window-height="1031"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-159.28571,-333.18893)">
+    <rect
+       style="color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.06299210000000000;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect2816"
+       width="154.13387"
+       height="239.17323"
+       x="159.64285"
+       y="332.97858"
+       ry="27.605892" />
+    <rect
+       ry="25.89263"
+       y="340.22171"
+       x="166.38208"
+       height="224.32979"
+       width="140.6554"
+       id="rect3600"
+       style="color:#000000;fill:#7a706a;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.97003704000000002;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;stroke-opacity:1" />
+    <g
+       id="g4417">
+      <path
+         sodipodi:type="arc"
+         style="color:#000000;fill:#ffeadd;fill-opacity:1;fill-rule:nonzero;stroke:#1c1c1c;stroke-width:1.06304348;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="path3028"
+         sodipodi:cx="87.321426"
+         sodipodi:cy="123.99466"
+         sodipodi:rx="40.17857"
+         sodipodi:ry="40.17857"
+         d="m 127.5,123.99466 a 40.17857,40.17857 0 1 1 -80.357143,0 40.17857,40.17857 0 1 1 80.357143,0 z"
+         transform="matrix(0.25288571,0,0,0.25288571,160.62744,324.24455)" />
+      <image
+         sodipodi:absref="/home/marc/Documents/github.com/project-bamboo/gfx/cards/oreIcon.png"
+         xlink:href="oreIcon.png"
+         width="19.260939"
+         height="13.64004"
+         id="image3030"
+         x="173.47783"
+         y="348.52774" />
+    </g>
+    <g
+       id="g4411">
+      <path
+         transform="matrix(0.25288571,0,0,0.25288571,268.98458,324.24441)"
+         d="m 127.5,123.99466 a 40.17857,40.17857 0 1 1 -80.357143,0 40.17857,40.17857 0 1 1 80.357143,0 z"
+         sodipodi:ry="40.17857"
+         sodipodi:rx="40.17857"
+         sodipodi:cy="123.99466"
+         sodipodi:cx="87.321426"
+         id="path3034"
+         style="color:#000000;fill:#ffeadd;fill-opacity:1;fill-rule:nonzero;stroke:#1c1c1c;stroke-width:1.06304348;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         sodipodi:type="arc" />
+      <image
+         sodipodi:absref="/home/marc/Documents/github.com/project-bamboo/gfx/cards/oreIcon.png"
+         xlink:href="oreIcon.png"
+         y="348.52762"
+         x="281.83496"
+         id="image3036"
+         height="13.64004"
+         width="19.260939" />
+    </g>
+    <g
+       id="g4433">
+      <path
+         transform="matrix(0.25288571,0,0,0.25288571,160.62744,517.88727)"
+         d="m 127.5,123.99466 a 40.17857,40.17857 0 1 1 -80.357143,0 40.17857,40.17857 0 1 1 80.357143,0 z"
+         sodipodi:ry="40.17857"
+         sodipodi:rx="40.17857"
+         sodipodi:cy="123.99466"
+         sodipodi:cx="87.321426"
+         id="path3046"
+         style="color:#000000;fill:#ffeadd;fill-opacity:1;fill-rule:nonzero;stroke:#1c1c1c;stroke-width:1.06304348;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         sodipodi:type="arc" />
+      <image
+         sodipodi:absref="/home/marc/Documents/github.com/project-bamboo/gfx/cards/oreIcon.png"
+         xlink:href="oreIcon.png"
+         y="542.17047"
+         x="173.47783"
+         id="image3048"
+         height="13.64004"
+         width="19.260939" />
+    </g>
+    <g
+       id="g4429">
+      <path
+         sodipodi:type="arc"
+         style="color:#000000;fill:#ffeadd;fill-opacity:1;fill-rule:nonzero;stroke:#1c1c1c;stroke-width:1.06304348;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="path3040"
+         sodipodi:cx="87.321426"
+         sodipodi:cy="123.99466"
+         sodipodi:rx="40.17857"
+         sodipodi:ry="40.17857"
+         d="m 127.5,123.99466 a 40.17857,40.17857 0 1 1 -80.357143,0 40.17857,40.17857 0 1 1 80.357143,0 z"
+         transform="matrix(0.25288571,0,0,0.25288571,268.98458,517.88727)" />
+      <image
+         sodipodi:absref="/home/marc/Documents/github.com/project-bamboo/gfx/cards/oreIcon.png"
+         xlink:href="oreIcon.png"
+         width="19.260939"
+         height="13.64004"
+         id="image3042"
+         x="281.83496"
+         y="542.17047" />
+    </g>
+    <g
+       id="g4421">
+      <path
+         transform="matrix(1.2266667,0,0,1.2266667,129.59549,300.28648)"
+         d="m 127.5,123.99466 a 40.17857,40.17857 0 1 1 -80.357143,0 40.17857,40.17857 0 1 1 80.357143,0 z"
+         sodipodi:ry="40.17857"
+         sodipodi:rx="40.17857"
+         sodipodi:cy="123.99466"
+         sodipodi:cx="87.321426"
+         id="path3604"
+         style="color:#000000;fill:#ffeadd;fill-opacity:1;fill-rule:nonzero;stroke:#1c1c1c;stroke-width:1.06304348;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         sodipodi:type="arc" />
+      <image
+         sodipodi:absref="/home/marc/Documents/github.com/project-bamboo/gfx/cards/oreIcon.png"
+         xlink:href="oreIcon.png"
+         y="418.07645"
+         x="191.92857"
+         id="image3012"
+         height="66.163422"
+         width="93.428581" />
+    </g>
+  </g>
+</svg>
