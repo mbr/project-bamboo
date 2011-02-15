@@ -215,7 +215,6 @@ class HandRenderer(object):
 
 		# num cards to render
 		num_cards = sum(player.resources.values())
-		print "NUM CARDS",num_cards
 
 		# the 2d coordinate system is x in [-aspect,aspect] left-to-right,
 		# y in [-1,1] bottom-to-top
