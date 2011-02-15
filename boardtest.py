@@ -83,7 +83,8 @@ class SimpleTileset(object):
 
 	def load_texture(self, subpath):
 		tex = self.base.loader.loadTexture(self.tileset_path + subpath)
-		tex.setMinfilter(Texture.FTLinearMipmapLinear)
+		tex.setMinfilter(Texture.FTLinearMipmapLinear) # FIXME: refactor/combine
+		                                               #        load_texture methods
 		tex.setAnisotropicDegree(2)
 		return tex
 
@@ -194,6 +195,37 @@ class BoardRenderer(object):
 			path.setTexture(tex)
 
 
+class HandRenderer(object):
+	def __init__(self, base, player):
+		self.base = base
+		self.player = player
+
+		cardModel = self.load_card_model('Brick')
+
+		# the behaviour of aspect2d is a bit strange,
+		# rotating the card always causes it be face-up
+		cardModel.reparentTo(self.base.aspect2d)
+
+	def load_card_model(self, face):
+		facepart = face[0].lower() + face[1:]
+		model = self.base.loader.loadModel('models/cardModel')
+		tex = self.load_texture('textures/%sCard.png' % facepart)
+
+		# apply texture, position and scaling
+		model.setTexture(tex, 1)
+		model.setScale(0.2, 0.2, 0.2)
+		model.setPos(0,0,0)
+
+		return model
+
+	def load_texture(self, path):
+		tex = self.base.loader.loadTexture(path)
+		tex.setMinfilter(Texture.FTLinearMipmapLinear) # FIXME: refactor/combine
+		                                               #        load_texture methods
+		tex.setAnisotropicDegree(2)
+		return tex
+
+
 class MyApp(ShowBase, DirectObject.DirectObject):
 	def __init__(self):
 		ShowBase.__init__(self)
@@ -219,6 +251,7 @@ class MyApp(ShowBase, DirectObject.DirectObject):
 					break
 
 		self.board_renderer = BoardRenderer(self, game.board)
+		self.hand_renderer = HandRenderer(self, game.players.values()[0])
 
 		# setup some 3-point lighting for the whole board
 		lKey = DirectionalLight('lKey')
