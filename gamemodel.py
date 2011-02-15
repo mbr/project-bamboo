@@ -375,3 +375,10 @@ class Player(object):
 	def __init__(self, name, color):
 		self.name = name
 		self.color = color
+		self.resources = {
+			'Ore': 0,
+			'Lumber': 0,
+			'Wool': 0,
+			'Grain': 0,
+			'Brick': 0
+		}
