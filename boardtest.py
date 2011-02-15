@@ -196,25 +196,67 @@ class BoardRenderer(object):
 
 
 class HandRenderer(object):
-	def __init__(self, base, player):
+	def __init__(self, base, player, card_size = 0.2, width = 0.5, card_x_overlap = 0.2, card_y_overlap = 0.8):
 		self.base = base
 		self.player = player
 
-		cardModel = self.load_card_model('Brick')
+		aspect_ratio = self.base.getAspectRatio()
+		self.card_size = card_size # a card size of 1 makes it 2/3 of the screen high
+		                           # cards have a ration of 1:1.555
 
-		# the behaviour of aspect2d is a bit strange,
-		# rotating the card always causes it be face-up
-		cardModel.reparentTo(self.base.aspect2d)
+		self.width = width         # width is percentage of screen width
+		                           # wider screen => more cards displayed
+
+		self.card_x_overlap = card_x_overlap # percentage of card that overlaps onto next
+		self.card_y_overlap = card_y_overlap
+
+		card_x_offset = (1-card_x_overlap)*card_size
+		card_y_offset = (1.555-card_y_overlap)*card_size
+
+		# num cards to render
+		num_cards = sum(player.resources.values())
+		print "NUM CARDS",num_cards
+
+		# the 2d coordinate system is x in [-aspect,aspect] left-to-right,
+		# y in [-1,1] bottom-to-top
+		cards_per_row = int(((aspect_ratio*2)*width-card_size) / card_x_offset)
+
+		# the hand offset
+		hand_width = card_size + (min(num_cards, cards_per_row)-1) * card_x_offset if num_cards else 0
+		x_offset = aspect_ratio-hand_width
+		y_offset = -1 # draw from the bottom
+
+		resource_index = 0
+		for resource, amount in sorted(player.resources.iteritems()):
+			for i in xrange(0, amount): # arrangement depends on order in tree
+				cardModel = self.load_card_model(resource)
+				cardModel.setScale(self.card_size, self.card_size, self.card_size)
+				cardModel.setPos(
+					# x - left/right
+					x_offset + card_x_offset * (resource_index%cards_per_row),
+					# y - ignored
+					0,
+					# z - "intuitive" y
+					y_offset + card_y_offset * (resource_index/cards_per_row)
+				)
+
+				# control render order, first card should also be the one
+				# on the front
+				cardModel.setBin("fixed", -resource_index)
+
+				# the behaviour of aspect2d is a bit strange,
+				# rotating the card always causes it be face-up
+				cardModel.reparentTo(self.base.aspect2d)
+
+				resource_index += 1
 
 	def load_card_model(self, face):
 		facepart = face[0].lower() + face[1:]
 		model = self.base.loader.loadModel('models/cardModel')
 		tex = self.load_texture('textures/%sCard.png' % facepart)
 
-		# apply texture, position and scaling
+		# apply texture
 		model.setTexture(tex, 1)
-		model.setScale(0.2, 0.2, 0.2)
-		model.setPos(0,0,0)
 
 		return model
 
@@ -238,6 +280,9 @@ class MyApp(ShowBase, DirectObject.DirectObject):
 
 		# place some random cities
 		for player in game.players.values():
+			# give the player some random resources
+			for resource in player.resources:
+				player.resources[resource] = random.randint(0,8)
 			while True:
 				n = random.choice(game.board.network.nodes())
 				if game.board.node_available(n):
