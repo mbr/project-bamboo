@@ -218,7 +218,7 @@ class MyApp(ShowBase, DirectObject.DirectObject):
 					game.board.network.edge[n][m]['player'] = player
 					break
 
-		self.renderer = BoardRenderer(self, game.board)
+		self.board_renderer = BoardRenderer(self, game.board)
 
 		# setup some 3-point lighting for the whole board
 		lKey = DirectionalLight('lKey')
@@ -302,10 +302,10 @@ class MyApp(ShowBase, DirectObject.DirectObject):
 
 		# setup ray through camera position and mouse position (on camera plane)
 		mouse_pos = base.mouseWatcherNode.getMouse()
-		self.pick_ray.setFromLens(self.renderer.base.camNode, mouse_pos.getX(), mouse_pos.getY())
+		self.pick_ray.setFromLens(self.board_renderer.base.camNode, mouse_pos.getX(), mouse_pos.getY())
 
 		# traverse scene graph and determine nearest selection (if pickable)
-		self.pick_traverser.traverse(self.renderer.base.render)
+		self.pick_traverser.traverse(self.board_renderer.base.render)
 		self.pick_queue.sortEntries()
 		if not self.pick_queue.getNumEntries(): return
 		node = self.pick_queue.getEntry(0).getIntoNodePath().findNetTag('pickable')
@@ -316,7 +316,7 @@ class MyApp(ShowBase, DirectObject.DirectObject):
 		ts.setMode(TextureStage.MModulate)
 		colors = list(Game.player_colors)
 		colors.remove('white')
-		node.setTexture(ts, self.renderer.tileset.load_texture('textures/player%s.png' % random.choice(colors).capitalize()))
+		node.setTexture(ts, self.board_renderer.tileset.load_texture('textures/player%s.png' % random.choice(colors).capitalize()))
 
 	def on_quit(self):
 		sys.exit(0)
