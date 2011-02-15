@@ -15,7 +15,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.47 r22583"
-   sodipodi:docname="woodCard.svg">
+   sodipodi:docname="sheepCard.svg">
   <defs
      id="defs4">
     <inkscape:perspective
@@ -81,13 +81,6 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
-    <inkscape:perspective
-       id="perspective5628"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_x="0 : 0.5 : 1"
-       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -97,8 +90,8 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.3134976"
-     inkscape:cx="-19.843468"
-     inkscape:cy="152.15618"
+     inkscape:cx="-94.405897"
+     inkscape:cy="117.57651"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -117,7 +110,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -141,12 +134,12 @@
        height="224.32979"
        width="140.6554"
        id="rect3600"
-       style="color:#000000;fill:#214119;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.97003704000000002;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;stroke-opacity:1" />
+       style="color:#000000;fill:#85aa0c;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.97003704000000002;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;stroke-opacity:1" />
     <g
-       id="g5655"
+       id="g4933"
        transform="matrix(0.20615682,0,0,0.20615682,133.91045,262.33844)">
       <g
-         id="g5657">
+         id="g4935">
         <path
            transform="matrix(1.2266667,0,0,1.2266667,129.59549,300.28648)"
            d="m 127.5,123.99466 c 0,22.19001 -17.98856,40.17857 -40.178574,40.17857 -22.190011,0 -40.178569,-17.98856 -40.178569,-40.17857 0,-22.19001 17.988558,-40.17857 40.178569,-40.17857 22.190014,0 40.178574,17.98856 40.178574,40.17857 z"
@@ -154,28 +147,28 @@
            sodipodi:rx="40.17857"
            sodipodi:cy="123.99466"
            sodipodi:cx="87.321426"
-           id="path5659"
+           id="path4937"
            style="color:#000000;fill:#ffeadd;fill-opacity:1;fill-rule:nonzero;stroke:#1c1c1c;stroke-width:1.06304348;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
            sodipodi:type="arc" />
       </g>
       <image
-         sodipodi:absref="/home/marc/Documents/github.com/project-bamboo/gfx/cards/woodIcon.png"
-         xlink:href="woodIcon.png"
-         width="89.503769"
-         height="81.841965"
-         id="image5661"
-         x="194.60693"
-         y="412.06985" />
+         sodipodi:absref="/home/marc/Documents/github.com/project-bamboo/gfx/cards/woolIcon.png"
+         xlink:href="woolIcon.png"
+         y="415.79617"
+         x="194.66736"
+         id="image4939"
+         height="76.874962"
+         width="83.892586" />
     </g>
     <g
        transform="matrix(0.20615682,0,0,0.20615682,242.26759,262.3383)"
-       id="g5663">
+       id="g4941">
       <g
-         id="g5665">
+         id="g4943">
         <path
            sodipodi:type="arc"
            style="color:#000000;fill:#ffeadd;fill-opacity:1;fill-rule:nonzero;stroke:#1c1c1c;stroke-width:1.06304348;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-           id="path5667"
+           id="path4945"
            sodipodi:cx="87.321426"
            sodipodi:cy="123.99466"
            sodipodi:rx="40.17857"
@@ -184,23 +177,23 @@
            transform="matrix(1.2266667,0,0,1.2266667,129.59549,300.28648)" />
       </g>
       <image
-         sodipodi:absref="/home/marc/Documents/github.com/project-bamboo/gfx/cards/woodIcon.png"
-         xlink:href="woodIcon.png"
-         y="412.06985"
-         x="194.60693"
-         id="image5669"
-         height="81.841965"
-         width="89.503769" />
+         sodipodi:absref="/home/marc/Documents/github.com/project-bamboo/gfx/cards/woolIcon.png"
+         xlink:href="woolIcon.png"
+         width="83.892586"
+         height="76.874962"
+         id="image4947"
+         x="194.66736"
+         y="415.79617" />
     </g>
     <g
        transform="matrix(0.20615682,0,0,0.20615682,133.91045,455.98116)"
-       id="g5679">
+       id="g4957">
       <g
-         id="g5681">
+         id="g4959">
         <path
            sodipodi:type="arc"
            style="color:#000000;fill:#ffeadd;fill-opacity:1;fill-rule:nonzero;stroke:#1c1c1c;stroke-width:1.06304348;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-           id="path5683"
+           id="path4961"
            sodipodi:cx="87.321426"
            sodipodi:cy="123.99466"
            sodipodi:rx="40.17857"
@@ -209,19 +202,19 @@
            transform="matrix(1.2266667,0,0,1.2266667,129.59549,300.28648)" />
       </g>
       <image
-         sodipodi:absref="/home/marc/Documents/github.com/project-bamboo/gfx/cards/woodIcon.png"
-         xlink:href="woodIcon.png"
-         y="412.06985"
-         x="194.60693"
-         id="image5685"
-         height="81.841965"
-         width="89.503769" />
+         sodipodi:absref="/home/marc/Documents/github.com/project-bamboo/gfx/cards/woolIcon.png"
+         xlink:href="woolIcon.png"
+         width="83.892586"
+         height="76.874962"
+         id="image4963"
+         x="194.66736"
+         y="415.79617" />
     </g>
     <g
-       id="g5671"
+       id="g4949"
        transform="matrix(0.20615682,0,0,0.20615682,242.26759,455.98116)">
       <g
-         id="g5673">
+         id="g4951">
         <path
            transform="matrix(1.2266667,0,0,1.2266667,129.59549,300.28648)"
            d="m 127.5,123.99466 c 0,22.19001 -17.98856,40.17857 -40.178574,40.17857 -22.190011,0 -40.178569,-17.98856 -40.178569,-40.17857 0,-22.19001 17.988558,-40.17857 40.178569,-40.17857 22.190014,0 40.178574,17.98856 40.178574,40.17857 z"
@@ -229,21 +222,21 @@
            sodipodi:rx="40.17857"
            sodipodi:cy="123.99466"
            sodipodi:cx="87.321426"
-           id="path5675"
+           id="path4953"
            style="color:#000000;fill:#ffeadd;fill-opacity:1;fill-rule:nonzero;stroke:#1c1c1c;stroke-width:1.06304348;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
            sodipodi:type="arc" />
       </g>
       <image
-         sodipodi:absref="/home/marc/Documents/github.com/project-bamboo/gfx/cards/woodIcon.png"
-         xlink:href="woodIcon.png"
-         width="89.503769"
-         height="81.841965"
-         id="image5677"
-         x="194.60693"
-         y="412.06985" />
+         sodipodi:absref="/home/marc/Documents/github.com/project-bamboo/gfx/cards/woolIcon.png"
+         xlink:href="woolIcon.png"
+         y="415.79617"
+         x="194.66736"
+         id="image4955"
+         height="76.874962"
+         width="83.892586" />
     </g>
     <g
-       id="g5650">
+       id="g4928">
       <g
          id="g4698">
         <path
@@ -254,17 +247,17 @@
            sodipodi:cy="123.99466"
            sodipodi:rx="40.17857"
            sodipodi:ry="40.17857"
-           d="m 127.5,123.99466 a 40.17857,40.17857 0 1 1 -80.357143,0 40.17857,40.17857 0 1 1 80.357143,0 z"
+           d="m 127.5,123.99466 c 0,22.19001 -17.98856,40.17857 -40.178574,40.17857 -22.190011,0 -40.178569,-17.98856 -40.178569,-40.17857 0,-22.19001 17.988558,-40.17857 40.178569,-40.17857 22.190014,0 40.178574,17.98856 40.178574,40.17857 z"
            transform="matrix(1.2266667,0,0,1.2266667,129.59549,300.28648)" />
       </g>
       <image
-         sodipodi:absref="/home/marc/Documents/github.com/project-bamboo/gfx/cards/woodIcon.png"
-         xlink:href="woodIcon.png"
-         y="412.06985"
-         x="194.60693"
-         id="image5630"
-         height="81.841965"
-         width="89.503769" />
+         sodipodi:absref="/home/marc/Documents/github.com/project-bamboo/gfx/cards/woolIcon.png"
+         xlink:href="woolIcon.png"
+         width="83.892586"
+         height="76.874962"
+         id="image4916"
+         x="194.66736"
+         y="415.79617" />
     </g>
   </g>
 </svg>
