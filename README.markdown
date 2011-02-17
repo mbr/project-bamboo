@@ -48,3 +48,18 @@ Once you have *Panda3* and *NetworkX* installed, you can run the game with
     $ python boardtest.py
 
 If that does not work, trying using `ppython` instead of `python` to start.
+
+Unit tests
+----------
+*unittest2* or Python 2.7 are required to run unittests. If unittest2 is installed, simply run
+
+    $ unit2 discover
+
+to run the unittests.
+
+If *[coverage](http://nedbatchelder.com/code/coverage/)* is installed as well, coverage can be run to check the test coverage with
+
+    $ coverage run `which unit2` discover
+    $ coverage html
+
+which will create a directory `htmlcov` with the results.
