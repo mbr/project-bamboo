@@ -23,9 +23,9 @@ class Game(object):
 	player_colors = 'red', 'blue', 'green', 'orange', 'brown', 'white'
 
 	def __init__(self):
-		self.board = Board()
-		self.board.generate_board()
+		self.board = None
 		self.players = {}
+		self.phase = 'init'
 
 	def create_player(self, name, color = None):
 		color = color or random.choice(self.colors_still_available())
