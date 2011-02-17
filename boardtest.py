@@ -280,6 +280,8 @@ class MyApp(ShowBase, DirectObject.DirectObject):
 		game.create_player('Player Two')
 		game.create_player('Player Three')
 
+		game.initialize_board()
+
 		# place some random cities
 		for player in game.players.values():
 			# give the player some random resources
