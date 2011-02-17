@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # coding=utf8
 
-import unittest
+try: import unittest2 as unittest
+except ImportError: import unittest
+
 from gamemodel.board import *
 from gamemodel.hexgrid import *
 from gamemodel.tiles import *
@@ -26,10 +28,8 @@ class TestGeometryFunctions(unittest.TestCase):
 
 class TestHexPosition(unittest.TestCase):
 	def test_hex_position_validates_position(self):
-		def cm():
+		with self.assertRaises(Exception):
 			HexPosition(1,0,0)
-
-		self.assertRaises(Exception, cm)
 
 	def test_hex_position_addition(self):
 		a = HexPosition(5, -5, 0)
