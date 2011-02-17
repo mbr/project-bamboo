@@ -6,4 +6,3 @@ except ImportError: import unittest
 
 from gamemodel.board import *
 from gamemodel.tiles import *
-from gamemodel.game import *
