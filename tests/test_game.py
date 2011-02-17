@@ -6,7 +6,10 @@ except ImportError: import unittest
 
 from gamemodel.game import *
 
-class TestGame(unittest.TestCase):
+from mock import Mock
+import mock
+
+class TestGameInitPhase(unittest.TestCase):
 	def setUp(self):
 		self.game = Game()
 
@@ -47,6 +50,20 @@ class TestGame(unittest.TestCase):
 	def test_game_starts_with_no_players_and_board(self):
 		self.assertIsNone(self.game.board)
 		self.assertItemsEqual(self.game.players, [])
+
+	def test_game_initialize_board_sets_up_board(self):
+		self.game.initialize_board()
+		self.assertIsNotNone(self.game.board)
+
+	def test_game_passes_initialize_board_parameters(self):
+		args = ['1', 2, 'three']
+		kwargs = {'foo': 'bar'}
+
+		with mock.patch('gamemodel.game.Board') as mockboard:
+			self.game.initialize_board(*args, **kwargs)
+			mockboard.assert_called()
+			self.game.board.generate_board.assert_called_with(*args, **kwargs)
+
 
 class TestPlayer(unittest.TestCase):
 	def setUp(self):

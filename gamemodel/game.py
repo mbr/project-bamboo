@@ -37,3 +37,7 @@ class Game(object):
 		for col in self.player_colors:
 			if col not in self.players: cs.append(col)
 		return cs
+
+	def initialize_board(self, *args, **kwargs):
+		self.board = Board()
+		self.board.generate_board(*args, **kwargs)
