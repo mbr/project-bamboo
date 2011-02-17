@@ -51,7 +51,7 @@ If that does not work, trying using `ppython` instead of `python` to start.
 
 Unit tests
 ----------
-*unittest2* or Python 2.7 are required to run unittests. If unittest2 is installed, simply run
+*unittest2* or Python 2.7 are required to run unittests, as well as *[mock](http://www.voidspace.org.uk/python/mock/)*. If unittest2 is installed, simply run
 
     $ unit2 discover
 
