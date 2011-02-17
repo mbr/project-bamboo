@@ -8,10 +8,10 @@ Screenshots
 -----------
 A few screenshots to give a quick impression of the current state (as of Feb 17, 2011):
 
-* [http://dope.marcbrinkmann.de/download/8ec5663c-b522-41c5-9f60-8ffe24d26159]()
-* [http://dope.marcbrinkmann.de/download/e5551a51-a6b5-4b4b-bb61-830efaa8861b]()
-* [http://dope.marcbrinkmann.de/download/4bb84c7b-0df9-4490-bd42-a679caf72766]()
-* [http://dope.marcbrinkmann.de/download/e924aa06-2e52-4995-b0f1-4a965fdde34d]()
+* <http://dope.marcbrinkmann.de/download/8ec5663c-b522-41c5-9f60-8ffe24d26159>
+* <http://dope.marcbrinkmann.de/download/e5551a51-a6b5-4b4b-bb61-830efaa8861b>
+* <http://dope.marcbrinkmann.de/download/4bb84c7b-0df9-4490-bd42-a679caf72766>
+* <http://dope.marcbrinkmann.de/download/e924aa06-2e52-4995-b0f1-4a965fdde34d>
 
 Current state
 -------------
