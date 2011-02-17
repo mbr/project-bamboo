@@ -95,8 +95,6 @@ class Board(object):
 			else:
 				prev = False
 
-		print "generated network %d nodes, %d edges" % (self.network.number_of_nodes(), self.network.number_of_edges())
-
 	def walk_coast(self):
 		"""walk along the coast, radius r"""
 		# starting top right tile, top node
