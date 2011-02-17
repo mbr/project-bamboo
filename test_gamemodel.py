@@ -2,7 +2,10 @@
 # coding=utf8
 
 import unittest
-from gamemodel import *
+from gamemodel.board import *
+from gamemodel.hexgrid import *
+from gamemodel.tiles import *
+from gamemodel.game import *
 from math import sqrt
 
 class TestGeometryFunctions(unittest.TestCase):

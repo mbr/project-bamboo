@@ -11,7 +11,10 @@ from pandac.PandaModules import AmbientLight, Spotlight, PerspectiveLens, Direct
 from panda3d.core import VBase4, Vec3, Vec4, Mat4, TransformState, Material, ConfigVariableInt, ConfigVariableBool, ConfigVariableString, CollisionTraverser, CollisionNode, CollisionHandlerQueue, CollisionRay, GeomNode, Texture, TextureStage
 from math import pi, sqrt, cos, sin
 
-from gamemodel import *
+from gamemodel.board import *
+from gamemodel.hexgrid import *
+from gamemodel.tiles import *
+from gamemodel.game import *
 import random
 
 def align_to_vector(v):
