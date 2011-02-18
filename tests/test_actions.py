@@ -60,7 +60,6 @@ class TestPlayerAction(unittest.TestCase, TestPlayerActionMixin):
 		pa.assert_legal(game)
 
 
-
 class TestStartGameAction(unittest.TestCase, TestPlayerActionMixin):
 	def setUp(self):
 		self.game = Game()
