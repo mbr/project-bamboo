@@ -5,6 +5,7 @@ try: import unittest2 as unittest
 except ImportError: import unittest
 
 from gamemodel.game import *
+from gamemodel.actions import *
 
 from mock import Mock
 import mock
@@ -88,6 +89,112 @@ class TestGameInitPhase(unittest.TestCase):
 	def test_game_starts_on_round0_turn0(self):
 		self.assertEqual(self.game.turn, 0)
 		self.assertEqual(self.game.round, 0)
+
+	def test_current_player_throws_exception(self):
+		with self.assertRaises(Game.WrongPhaseException):
+			self.game.current_player
+
+
+class TestGameSetupPhase(unittest.TestCase):
+	def setUp(self):
+		self.game = Game()
+
+		# set-up three players
+		self.game.create_player('playerOne', 'red')
+		self.game.create_player('playerTwo')
+		self.game.create_player('playerThree')
+
+		# start the game
+		start_game_action = StartGameAction('red')
+		start_game_action.apply(self.game)
+
+	def test_game_uses_setup_turn_order(self):
+		self.assertEqual(self.game.current_player, self.game.turn_order[self.game.turn])
+		player1 = self.game.current_player
+		self.game.next_turn()
+		self.assertEqual(self.game.current_player, self.game.turn_order[self.game.turn])
+		player2 = self.game.current_player
+		self.game.next_turn()
+		self.assertEqual(self.game.current_player, self.game.turn_order[self.game.turn])
+		player3 = self.game.current_player
+		self.game.next_turn()
+
+		# reverse order afterwards
+		self.assertEqual(self.game.current_player, player3)
+		self.game.next_turn()
+		self.assertEqual(self.game.current_player, player2)
+		self.game.next_turn()
+		self.assertEqual(self.game.current_player, player1)
+
+
+class TestGameMainPhase(unittest.TestCase):
+	def setUp(self):
+		self.game = Game()
+
+		# set-up three players
+		self.game.create_player('playerOne', 'red')
+		self.game.create_player('playerTwo')
+		self.game.create_player('playerThree')
+
+		# start the game
+		start_game_action = StartGameAction('red')
+		start_game_action.apply(self.game)
+
+	def test_game_uses_normal_turn_order(self):
+		self.game.phase = 'main'
+		self.assertEqual(self.game.current_player, self.game.turn_order[self.game.turn])
+		player1 = self.game.current_player
+		self.game.next_turn()
+
+		self.assertEqual(self.game.current_player, self.game.turn_order[self.game.turn])
+		player2 = self.game.current_player
+		self.game.next_turn()
+
+		self.assertEqual(self.game.current_player, self.game.turn_order[self.game.turn])
+		player3 = self.game.current_player
+		self.game.next_turn()
+
+		self.assertEqual(self.game.current_player, player1)
+		self.game.next_turn()
+		self.assertEqual(self.game.current_player, player2)
+		self.game.next_turn()
+		self.assertEqual(self.game.current_player, player3)
+		self.game.next_turn()
+		self.assertEqual(self.game.current_player, player1)
+		self.game.next_turn()
+		self.assertEqual(self.game.current_player, player2)
+		self.game.next_turn()
+		self.assertEqual(self.game.current_player, player3)
+
+	def test_turns_and_rounds_are_counted(self):
+		self.game.phase = 'main'
+		self.assertEqual(0, self.game.round)
+		self.assertEqual(0, self.game.turn)
+		self.game.next_turn()
+
+		self.assertEqual(0, self.game.round)
+		self.assertEqual(1, self.game.turn)
+		self.game.next_turn()
+
+		self.assertEqual(0, self.game.round)
+		self.assertEqual(2, self.game.turn)
+		self.game.next_turn()
+
+		self.assertEqual(1, self.game.round)
+		self.assertEqual(0, self.game.turn)
+		self.game.next_turn()
+
+		self.assertEqual(1, self.game.round)
+		self.assertEqual(1, self.game.turn)
+		self.game.next_turn()
+
+		self.assertEqual(1, self.game.round)
+		self.assertEqual(2, self.game.turn)
+		self.game.next_turn()
+
+		self.assertEqual(2, self.game.round)
+		self.assertEqual(0, self.game.turn)
+		self.game.next_turn()
 
 
 class TestPlayer(unittest.TestCase):
