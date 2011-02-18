@@ -9,6 +9,14 @@ from gamemodel.game import *
 from mock import Mock
 import mock
 
+class TestGameRandomGenerator(unittest.TestCase):
+	def setUp(self):
+		self.game = Game()
+
+	def test_game_sets_up_random_generator(self):
+		self.assertIsNotNull(self.game.random)
+
+
 class TestGameInitPhase(unittest.TestCase):
 	def setUp(self):
 		self.game = Game()
