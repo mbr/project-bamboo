@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding=utf8
 
-import random
+from random import Random
 
 from board import Board
 
@@ -22,13 +22,15 @@ class Game(object):
 	class ColorAlreadyTakenException(Exception): pass
 	player_colors = 'red', 'blue', 'green', 'orange', 'brown', 'white'
 
-	def __init__(self):
+	def __init__(self, random_seed = None):
 		self.board = None
 		self.players = {}
 		self.phase = 'init'
+		self.initial_seed = random_seed
+		self.random = Random(random_seed)
 
 	def create_player(self, name, color = None):
-		color = color or random.choice(self.colors_still_available())
+		color = color or self.random.choice(self.colors_still_available())
 		if color in self.players: raise self.ColorAlreadyTakenException('Color %s is already taken' % color)
 		self.players[color] = Player(name, color)
 
@@ -39,5 +41,5 @@ class Game(object):
 		return cs
 
 	def initialize_board(self, *args, **kwargs):
-		self.board = Board()
+		self.board = Board(self.random)
 		self.board.generate_board(*args, **kwargs)

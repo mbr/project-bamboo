@@ -1,19 +1,19 @@
 #!/usr/bin/env python
 # coding=utf8
 
-import random
 from tiles import *
 import networkx
 
 from hexgrid import HexPosition
 
 class Board(object):
-	def __init__(self):
+	def __init__(self, random):
 		# tiles have cube-coordinates: (x,y,z) with x+y+z == 0
 		self.tiles = {}
 		self.network = networkx.Graph()
 		self.dice_map = {}
 		self.robber = None
+		self.random = random
 
 	def __str__(self):
 		s = "Board\n=====\n"
@@ -24,7 +24,7 @@ class Board(object):
 		return s
 
 	def generate_board(self, setup = STANDARD_BOARD_TILES, chips = STANDARD_BOARD_CHIPS):
-		stack = TileStack(setup)
+		stack = TileStack(self.random, setup)
 
 		# determine board radius
 		l = len(stack.tiles)-1
@@ -40,7 +40,7 @@ class Board(object):
 
 		# spiral walk to create board
 		# use a random direction
-		for pos in HexPosition.walk_spiral(r, random.choice(HexPosition.directions)):
+		for pos in HexPosition.walk_spiral(r, self.random.choice(HexPosition.directions)):
 			# first, put down tile
 			self.tiles[pos] = stack.get_random_tile()()
 			self.tiles[pos].position = pos
@@ -84,7 +84,7 @@ class Board(object):
 		harbors = STANDARD_HARBORS[:]
 
 		# disable this to not shuffle harbors
-		random.shuffle(harbors)
+		self.random.shuffle(harbors)
 
 		prev = False
 		for node_id in self.walk_coast():
