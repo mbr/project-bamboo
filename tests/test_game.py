@@ -14,7 +14,7 @@ class TestGameRandomGenerator(unittest.TestCase):
 		self.game = Game()
 
 	def test_game_sets_up_random_generator(self):
-		self.assertIsNotNull(self.game.random)
+		self.assertIsNotNone(self.game.random)
 
 
 class TestGameInitPhase(unittest.TestCase):
