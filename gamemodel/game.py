@@ -35,6 +35,20 @@ class Game(object):
 		self.round = 0
 		self.turn_order = None
 
+	@property
+	def current_player(self):
+		if 'main' == self.phase:
+			return self.turn_order[self.turn]
+		elif 'setup' == self.phase:
+			return self.turn_order[(-1-self.turn) if self.round%2 else self.turn]
+		else:
+			raise self.WrongPhaseException('No current player in %s phase.' % self.phase)
+
+	def next_turn(self):
+		self.turn = (self.turn + 1) % len(self.turn_order)
+		if 0 == self.turn: self.round += 1
+
+
 	def create_player(self, name, color = None):
 		if not 'init' == self.phase: raise self.WrongPhaseException('The game has already started, joining not possible.')
 		if len(self.players) == 4: raise self.TooManyPlayersException
