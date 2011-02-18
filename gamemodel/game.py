@@ -20,6 +20,7 @@ class Player(object):
 
 class Game(object):
 	class ColorAlreadyTakenException(Exception): pass
+	class TooManyPlayersException(Exception): pass
 	player_colors = 'red', 'blue', 'green', 'orange', 'brown', 'white'
 
 	def __init__(self, random_seed = None):
@@ -29,7 +30,12 @@ class Game(object):
 		self.initial_seed = random_seed
 		self.random = Random(random_seed)
 
+		self.turn = 0
+		self.round = 0
+		self.turn_order = None
+
 	def create_player(self, name, color = None):
+		if len(self.players) == 4: raise self.TooManyPlayersException
 		color = color or self.random.choice(self.colors_still_available())
 		if color in self.players: raise self.ColorAlreadyTakenException('Color %s is already taken' % color)
 		self.players[color] = Player(name, color)
