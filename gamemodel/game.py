@@ -21,6 +21,7 @@ class Player(object):
 class Game(object):
 	class ColorAlreadyTakenException(Exception): pass
 	class TooManyPlayersException(Exception): pass
+	class WrongPhaseException(Exception): pass
 	player_colors = 'red', 'blue', 'green', 'orange', 'brown', 'white'
 
 	def __init__(self, random_seed = None):
@@ -35,6 +36,7 @@ class Game(object):
 		self.turn_order = None
 
 	def create_player(self, name, color = None):
+		if not 'init' == self.phase: raise self.WrongPhaseException('The game has already started, joining not possible.')
 		if len(self.players) == 4: raise self.TooManyPlayersException
 		color = color or self.random.choice(self.colors_still_available())
 		if color in self.players: raise self.ColorAlreadyTakenException('Color %s is already taken' % color)
