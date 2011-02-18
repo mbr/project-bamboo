@@ -36,6 +36,14 @@ class TestPlayerAction(unittest.TestCase):
 		pa = PlayerAction('red')
 		self.assertEqual(pa.player, 'red')
 
+	def test_existing_player_is_enforced(self):
+		game = Game()
+		pa = PlayerAction('red')
+		with self.assertRaises(IllegalActionException):
+			pa.assert_legal(game)
+		game.create_player('redPlayer', 'red')
+		pa.assert_legal(game)
+
 
 class TestStartGameAction(unittest.TestCase):
 	def setUp(self):
