@@ -31,7 +31,22 @@ class TestBaseAction(unittest.TestCase):
 				self.action.apply_unchecked.assert_called_with(mgame)
 
 
-class TestPlayerAction(unittest.TestCase):
+class TestPlayerActionMixin(object):
+	def test_valid_player_is_enforced_by_subclass(self):
+		# convention: self.game must be a valid game
+		#             and self.action a legal action
+		self.action.assert_legal(self.game)
+		del self.game.players[self.action.player]
+		with self.assertRaises(IllegalActionException):
+			self.action.assert_legal(self.game)
+
+
+class TestPlayerAction(unittest.TestCase, TestPlayerActionMixin):
+	def setUp(self):
+		self.game = Game()
+		self.game.create_player('bluePlayer', 'blue')
+		self.action = PlayerAction('blue')
+
 	def test_constructor_sets_player(self):
 		pa = PlayerAction('red')
 		self.assertEqual(pa.player, 'red')
@@ -45,10 +60,11 @@ class TestPlayerAction(unittest.TestCase):
 		pa.assert_legal(game)
 
 
-class TestStartGameAction(unittest.TestCase):
+
+class TestStartGameAction(unittest.TestCase, TestPlayerActionMixin):
 	def setUp(self):
 		self.game = Game()
-		self.game.create_player('playerOne')
+		self.game.create_player('playerOne', 'red')
 		self.game.create_player('playerTwo')
 		self.game.create_player('playerThree')
 		self.action = StartGameAction('red')

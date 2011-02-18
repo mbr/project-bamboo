@@ -39,6 +39,14 @@ class TestGameInitPhase(unittest.TestCase):
 		self.game.create_player('aPlayer')
 		self.assertEqual(1, len(self.game.players))
 
+	def test_create_player_allows_no_more_then_4_players(self):
+		self.game.create_player('playerOne')
+		self.game.create_player('playerTwo')
+		self.game.create_player('playerThree')
+		self.game.create_player('playerFour')
+		with self.assertRaises(Game.TooManyPlayersException):
+			self.game.create_player('playerFive')
+
 	def test_game_starts_with_zero_players(self):
 		self.assertEqual(0, len(self.game.players))
 
