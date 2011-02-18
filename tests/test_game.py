@@ -72,6 +72,13 @@ class TestGameInitPhase(unittest.TestCase):
 			mockboard.assert_called()
 			self.game.board.generate_board.assert_called_with(*args, **kwargs)
 
+	def test_game_starts_with_no_turn_order(self):
+		self.assertIsNone(self.game.turn_order)
+
+	def test_game_starts_on_round0_turn0(self):
+		self.assertEqual(self.game.turn, 0)
+		self.assertEqual(self.game.round, 0)
+
 
 class TestPlayer(unittest.TestCase):
 	def setUp(self):
