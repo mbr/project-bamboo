@@ -59,9 +59,11 @@ class TestGameInitPhase(unittest.TestCase):
 	def test_game_starts_in_init_phase(self):
 		self.assertEqual(self.game.phase, 'init')
 
-	@unittest.skip('no functionality to change phase yet')
 	def test_game_allows_plapyer_adding_only_in_init_phase(self):
-		raise NotImplementedError
+		self.game.create_player('playerOne')
+		self.game.phase = 'setup'
+		with self.assertRaises(Game.WrongPhaseException):
+			self.game.create_player('playerTwo')
 
 	def test_game_starts_with_no_players_and_board(self):
 		self.assertIsNone(self.game.board)
