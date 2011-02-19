@@ -43,7 +43,7 @@ This will install the *NetworkX* package.
 
 Starting
 --------
-Once you have *Panda3* and *NetworkX* installed, you can run the game with
+Once you have *Panda3D* and *NetworkX* installed, you can run the game with
 
     $ python boardtest.py
 
