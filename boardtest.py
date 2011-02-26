@@ -334,6 +334,7 @@ class MyApp(ShowBase, DirectObject.DirectObject):
 		lBelowNode.setR(0)
 		render.setLight(lBelowNode)
 
+		# picking test
 		self.pick_ray = CollisionRay()
 		self.pick_traverser = CollisionTraverser()
 		self.pick_queue = CollisionHandlerQueue()
@@ -341,7 +342,8 @@ class MyApp(ShowBase, DirectObject.DirectObject):
 		picker_node = CollisionNode('mouseRay')
 		picker_node.setFromCollideMask(GeomNode.getDefaultCollideMask())
 		picker_node.addSolid(self.pick_ray)
-		self.pick_traverser.addCollider(self.camera.attachNewNode(picker_node), self.pick_queue)
+		picker_np = self.camera.attachNewNode(picker_node)
+		self.pick_traverser.addCollider(picker_np, self.pick_queue)
 
 		self.accept('a', self.on_toggle_anti_alias)
 		self.mouse_controlled = True
@@ -378,12 +380,17 @@ class MyApp(ShowBase, DirectObject.DirectObject):
 		if self.mouse_controlled: return Task.done
 		return Task.cont
 
-	def on_pick(self):
-		if not base.mouseWatcherNode.hasMouse(): return
+	def _update_pick_ray(self):
+		if not base.mouseWatcherNode.hasMouse(): return False # no mouse control => do nothing
 
 		# setup ray through camera position and mouse position (on camera plane)
 		mouse_pos = base.mouseWatcherNode.getMouse()
 		self.pick_ray.setFromLens(self.board_renderer.base.camNode, mouse_pos.getX(), mouse_pos.getY())
+
+		return True
+
+	def on_pick(self):
+		if not self._update_pick_ray(): return Task.cont
 
 		# traverse scene graph and determine nearest selection (if pickable)
 		self.pick_traverser.traverse(self.board_renderer.base.render)
