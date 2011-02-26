@@ -135,7 +135,6 @@ class Board(object):
 			# start with the next set of neighbours
 			candidates = self.network.neighbors(node_id)
 
-
 	def node_available(self, node_id):
 		if 'building' in self.network.node[node_id]: return False
 
@@ -143,3 +142,7 @@ class Board(object):
 		for n in self.network.neighbors(node_id):
 			if 'building' in self.network.node[n]: return False
 		return True
+
+	def update_building(self, node_id, player, building):
+		self.network.node[node_id]['player'] = player
+		self.network.node[node_id]['building'] = building

@@ -290,8 +290,7 @@ class MyApp(ShowBase, DirectObject.DirectObject):
 			while True:
 				n = random.choice(game.board.network.nodes())
 				if game.board.node_available(n):
-					game.board.network.node[n]['building'] = 'city'
-					game.board.network.node[n]['player'] = player
+					game.board.update_building(n, player, 'city')
 
 					# place a random road
 					m = random.choice(game.board.network.neighbors(n))
