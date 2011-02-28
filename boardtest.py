@@ -334,30 +334,17 @@ class MyApp(ShowBase, DirectObject.DirectObject):
 		lBelowNode.setR(0)
 		render.setLight(lBelowNode)
 
-		# picking test
-		self.pick_ray = CollisionRay()
-		self.pick_traverser = CollisionTraverser()
-		self.pick_queue = CollisionHandlerQueue()
-
-		picker_node = CollisionNode('mouseRay')
-		picker_node.setFromCollideMask(GeomNode.getDefaultCollideMask())
-		picker_node.addSolid(self.pick_ray)
-		picker_np = self.camera.attachNewNode(picker_node)
-		self.pick_traverser.addCollider(picker_np, self.pick_queue)
-
 		self.accept('a', self.on_toggle_anti_alias)
 		self.mouse_controlled = True
 		self.on_toggle_mouse_control()
 		self.accept('m', self.on_toggle_mouse_control)
-		self.accept('mouse1', self.on_pick)
 		self.accept('q', self.on_quit)
 
-
-		# automatic placement guessing test
+		# onto-board selection collision test
 		select_mask = BitMask32(0x100)
+		self.select_ray = CollisionRay()
 		select_node = CollisionNode('mouseToSurfaceRay')
 		select_node.setFromCollideMask(select_mask)
-		self.select_ray = CollisionRay()
 		select_node.addSolid(self.select_ray)
 		select_np = self.camera.attachNewNode(select_node)
 
@@ -374,9 +361,10 @@ class MyApp(ShowBase, DirectObject.DirectObject):
 		self.select_node.addSolid(select_plane)
 		self.select_plane_np = self.render.attachNewNode(self.select_node)
 
-		self.debug_select = draw_debugging_arrow(self, Vec3(0,0,0), Vec3(0,1,0) )
+		self.debug_select = draw_debugging_arrow(self, Vec3(0,0,0), Vec3(0,1,0))
 
-		self.taskMgr.add(self.board_select_test, "boardSelectTestTask")
+		self.taskMgr.add(self.update_mouse_target, "mouseTarget")
+		self.taskMgr.add(self.update_debug_arrow, "updateDebugArrow")
 
 	def on_toggle_anti_alias(self):
 		if AntialiasAttrib.MNone != render.getAntialias():
@@ -406,39 +394,29 @@ class MyApp(ShowBase, DirectObject.DirectObject):
 		if self.mouse_controlled: return Task.done
 		return Task.cont
 
-	def _update_pick_ray(self):
-		if not base.mouseWatcherNode.hasMouse(): return False # no mouse control => do nothing
-
-		# setup ray through camera position and mouse position (on camera plane)
-		mouse_pos = base.mouseWatcherNode.getMouse()
-		self.pick_ray.setFromLens(self.board_renderer.base.camNode, mouse_pos.getX(), mouse_pos.getY())
-
-		return True
-
-	def _select_ray(self):
-		if not base.mouseWatcherNode.hasMouse(): return False # no mouse control => do nothing
+	def update_mouse_target(self, task):
+		if not base.mouseWatcherNode.hasMouse():
+			self.mouse_target = None
+			return Task.cont
 
 		# setup ray through camera position and mouse position (on camera plane)
 		mouse_pos = base.mouseWatcherNode.getMouse()
 		self.select_ray.setFromLens(self.board_renderer.base.camNode, mouse_pos.getX(), mouse_pos.getY())
 
-		return True
-
-	def board_select_test(self, task):
-		if not self._select_ray(): return Task.cont
-
 		self.select_traverser.traverse(self.board_renderer.base.render)
-		self.select_queue.sortEntries()
 
 		# abort if there's no collision
 		if not self.select_queue.getNumEntries(): return Task.cont
 
 		collision = self.select_queue.getEntry(0)
-		cpoint = collision.getSurfacePoint(collision.getIntoNodePath())
+		self.mouse_board_collision = collision.getSurfacePoint(collision.getIntoNodePath())
+		self.mouse_target = 'board'
 
-		# FIXME: erratic, why?
-		self.debug_select.setPos(cpoint)
+		return Task.cont
 
+	def update_debug_arrow(self, task):
+		if self.mouse_target:
+			self.debug_select.setPos(self.mouse_board_collision)
 		return Task.cont
 
 	def on_pick(self):
