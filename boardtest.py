@@ -8,7 +8,7 @@ from direct.showbase import DirectObject
 from direct.actor.Actor import Actor
 from direct.task import Task
 from pandac.PandaModules import AmbientLight, Spotlight, PerspectiveLens, DirectionalLight, AntialiasAttrib, WindowProperties
-from panda3d.core import VBase4, Vec3, Vec4, Mat4, TransformState, Material, ConfigVariableInt, ConfigVariableBool, ConfigVariableString, CollisionTraverser, CollisionNode, CollisionHandlerQueue, CollisionRay, GeomNode, Texture, TextureStage
+from panda3d.core import VBase4, Vec3, Vec4, Mat4, Point3, TransformState, Material, ConfigVariableInt, ConfigVariableBool, ConfigVariableString, CollisionTraverser, CollisionNode, CollisionHandlerQueue, CollisionRay, CollisionPlane, GeomNode, Texture, TextureStage, Plane, BitMask32
 from math import pi, sqrt, cos, sin
 
 from gamemodel.board import *
@@ -352,6 +352,32 @@ class MyApp(ShowBase, DirectObject.DirectObject):
 		self.accept('mouse1', self.on_pick)
 		self.accept('q', self.on_quit)
 
+
+		# automatic placement guessing test
+		select_mask = BitMask32(0x100)
+		select_node = CollisionNode('mouseToSurfaceRay')
+		select_node.setFromCollideMask(select_mask)
+		self.select_ray = CollisionRay()
+		select_node.addSolid(self.select_ray)
+		select_np = self.camera.attachNewNode(select_node)
+
+		self.select_queue = CollisionHandlerQueue()
+		self.select_traverser = CollisionTraverser()
+		self.select_traverser.addCollider(select_np, self.select_queue)
+
+		# create a plane that only collides with the mouse ray
+		select_plane = CollisionPlane(Plane(Vec3(0,0,1), Point3(0,0,0)))
+
+		# add plane to render
+		self.select_node = CollisionNode('boardCollisionPlane')
+		self.select_node.setCollideMask(select_mask)
+		self.select_node.addSolid(select_plane)
+		self.select_plane_np = self.render.attachNewNode(self.select_node)
+
+		self.debug_select = draw_debugging_arrow(self, Vec3(0,0,0), Vec3(0,1,0) )
+
+		self.taskMgr.add(self.board_select_test, "boardSelectTestTask")
+
 	def on_toggle_anti_alias(self):
 		if AntialiasAttrib.MNone != render.getAntialias():
 			render.setAntialias(AntialiasAttrib.MNone)
@@ -388,6 +414,32 @@ class MyApp(ShowBase, DirectObject.DirectObject):
 		self.pick_ray.setFromLens(self.board_renderer.base.camNode, mouse_pos.getX(), mouse_pos.getY())
 
 		return True
+
+	def _select_ray(self):
+		if not base.mouseWatcherNode.hasMouse(): return False # no mouse control => do nothing
+
+		# setup ray through camera position and mouse position (on camera plane)
+		mouse_pos = base.mouseWatcherNode.getMouse()
+		self.select_ray.setFromLens(self.board_renderer.base.camNode, mouse_pos.getX(), mouse_pos.getY())
+
+		return True
+
+	def board_select_test(self, task):
+		if not self._select_ray(): return Task.cont
+
+		self.select_traverser.traverse(self.board_renderer.base.render)
+		self.select_queue.sortEntries()
+
+		# abort if there's no collision
+		if not self.select_queue.getNumEntries(): return Task.cont
+
+		collision = self.select_queue.getEntry(0)
+		cpoint = collision.getSurfacePoint(collision.getIntoNodePath())
+
+		# FIXME: erratic, why?
+		self.debug_select.setPos(cpoint)
+
+		return Task.cont
 
 	def on_pick(self):
 		if not self._update_pick_ray(): return Task.cont
