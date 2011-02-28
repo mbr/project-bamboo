@@ -143,6 +143,28 @@ class Board(object):
 			if 'building' in self.network.node[n]: return False
 		return True
 
+	def count_buildings(self):
+		"""count the number of settlements/cities, returns a tuple of
+		(settlements, cities), each being a dictionary of counts for
+		each player"""
+		settlements = defaultdict(lambda: 0)
+		cities = defaultdict(lambda: 0)
+
+		for n in self.network.nodes_iter():
+			building = self.network.node[n].get('building', None)
+			if 'city' == building:
+				cities[self.network.node[n]['player']] += 1
+			elif 'settlement' == building:
+				settlements[self.network.node[n]['player']] += 1
+
+			self.network.node[n]
+
+		return (settlements, cities)
+
 	def update_building(self, node_id, player, building):
 		self.network.node[node_id]['player'] = player
 		self.network.node[node_id]['building'] = building
+
+	def node_resource_iter(self, player, node_id):
+		for tile_pos in node_id:
+			yield self.tiles[tile_pos].resource
