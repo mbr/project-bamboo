@@ -442,7 +442,7 @@ class MyApp(ShowBase, DirectObject.DirectObject):
 		return Task.cont
 
 	def on_pick(self):
-		if not self._update_pick_ray(): return Task.cont
+		if not self._update_pick_ray(): return
 
 		# traverse scene graph and determine nearest selection (if pickable)
 		self.pick_traverser.traverse(self.board_renderer.base.render)
